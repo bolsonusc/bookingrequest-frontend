@@ -1,0 +1,50 @@
+[18:04:48.855] Cloning github.com/streetteams/nextauth-bolierplate (Branch: main, Commit: dc072db)
+[18:04:49.180] Skipping build cache, deployment was triggered without cache.
+[18:04:49.729] Cloning completed: 874.000ms
+[18:04:49.951] Running build in Washington, D.C., USA (East) – iad1
+[18:04:50.098] Running "vercel build"
+[18:04:50.470] Vercel CLI 41.4.1
+[18:04:50.590] WARN! When using Next.js, it is recommended to place JavaScript Functions inside of the `pages/api` (provided by Next.js) directory instead of `api` (provided by Vercel). Other languages (Python, Go, etc) should still go in the `api` directory.
+[18:04:50.591] Learn More: https://nextjs.org/docs/api-routes/introduction
+[18:04:51.408] Installing dependencies...
+[18:04:55.392] npm warn deprecated @supabase/auth-helpers-shared@0.7.0: This package is now deprecated - please use the @supabase/ssr package instead.
+[18:04:55.732] npm warn deprecated @supabase/auth-helpers-nextjs@0.10.0: This package is now deprecated - please use the @supabase/ssr package instead.
+[18:05:04.427] 
+[18:05:04.428] added 349 packages in 13s
+[18:05:04.428] 
+[18:05:04.429] 132 packages are looking for funding
+[18:05:04.429]   run `npm fund` for details
+[18:05:04.483] Detected Next.js version: 15.2.3
+[18:05:04.487] Running "npm run build"
+[18:05:04.608] 
+[18:05:04.609] > my-app@0.1.0 build
+[18:05:04.609] > next build
+[18:05:04.609] 
+[18:05:05.212] Attention: Next.js now collects completely anonymous telemetry regarding usage.
+[18:05:05.214] This information is used to shape Next.js' roadmap and prioritize features.
+[18:05:05.214] You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+[18:05:05.214] https://nextjs.org/telemetry
+[18:05:05.215] 
+[18:05:05.316]    ▲ Next.js 15.2.3
+[18:05:05.317] 
+[18:05:05.328]    Linting and checking validity of types ...
+[18:05:07.920] 
+[18:05:07.921] ./pages/admin/index.tsx
+[18:05:07.921] 22:6  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+[18:05:07.921] 
+[18:05:07.921] info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+[18:05:09.539] Failed to compile.
+[18:05:09.539] 
+[18:05:09.540] ./pages/auth/verify.tsx:20:16
+[18:05:09.540] Type error: Block-scoped variable 'phone' used before its declaration.
+[18:05:09.540] 
+[18:05:09.540] [0m [90m 18 |[39m     [36mtry[39m {[0m
+[18:05:09.540] [0m [90m 19 |[39m       [36mconst[39m { data[33m,[39m error } [33m=[39m [36mawait[39m supabase[33m.[39mauth[33m.[39mverifyOtp({[0m
+[18:05:09.540] [0m[31m[1m>[22m[39m[90m 20 |[39m         phone[33m:[39m phone [36mas[39m string[33m,[39m[0m
+[18:05:09.540] [0m [90m    |[39m                [31m[1m^[22m[39m[0m
+[18:05:09.540] [0m [90m 21 |[39m         token[33m:[39m otp[33m,[39m[0m
+[18:05:09.540] [0m [90m 22 |[39m         type[33m:[39m [32m'sms'[39m[0m
+[18:05:09.540] [0m [90m 23 |[39m       })[33m;[39m[0m
+[18:05:09.556] Next.js build worker exited with code: 1 and signal: null
+[18:05:09.576] Error: Command "npm run build" exited with 1
+[18:05:09.860] 
