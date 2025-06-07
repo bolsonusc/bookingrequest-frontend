@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const Provider = () => {
 
@@ -20,13 +21,13 @@ const Provider = () => {
       setPageLoading(false);
     }
 
-    if(user && user?.user_metadata?.role === 'client'){
+    if (user && user?.user_metadata?.role === 'client') {
       router.push('/dashboard/client');
       return;
     }
   }, [user, loading, router]);
 
-  const logout = async() => {
+  const logout = async () => {
     await supabase.auth.signOut();
     router.push('/auth/login');
   }
@@ -39,12 +40,21 @@ const Provider = () => {
     );
   }
 
+  console.log('User:', user);
+
   return (
-    <div>
-      <h2>Service Provider</h2>
-      <p><Link href={'/settings'}>Update User (setting)</Link></p>
-      <button onClick={logout}>Logout</button>
-    </div>
+    <>
+      <Head>
+        <title>Service Provider Dashboard</title>
+        <meta name="description" content="Authentication system" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="bg-black py-12 px-4 sm:px-6 lg:px-8">
+        <div className='container mx-xl m-auto '>
+          <h2 className='text-white text-3xl  mb-6'>Service Provider Dashboard</h2>
+        </div>
+      </div>
+    </>
   )
 }
 
