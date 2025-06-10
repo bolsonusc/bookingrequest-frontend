@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
 import Head from 'next/head';
+import { UserInfo } from '../../components/provider/user-info';
 
 const Provider = () => {
 
@@ -51,7 +52,10 @@ const Provider = () => {
       </Head>
       <div className="bg-black py-12 px-4 sm:px-6 lg:px-8">
         <div className='container mx-xl m-auto '>
-          <h2 className='text-white text-3xl  mb-6'>Service Provider Dashboard</h2>
+
+          <UserInfo user={user} />
+      <button onClick={logout}>Logout</button>
+
         </div>
       </div>
     </>
