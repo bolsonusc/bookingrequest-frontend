@@ -3,11 +3,13 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
+import Head from 'next/head';
+import { UserInfo } from '../../components/provider/user-info';
 
 const Provider = () => {
 
   const router = useRouter();
-  const { supabase, loading, user } = useAuth();
+  const { loading, user } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -20,14 +22,16 @@ const Provider = () => {
       setPageLoading(false);
     }
 
-    if(user && user?.user_metadata?.role === 'client'){
+    if (user && user?.role === 'client') {
       router.push('/dashboard/client');
       return;
     }
   }, [user, loading, router]);
 
-  const logout = async() => {
-    await supabase.auth.signOut();
+  const logout = async () => {
+    // await supabase.auth.signOut();
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('refreshToken');
     router.push('/auth/login');
   }
 
@@ -39,12 +43,24 @@ const Provider = () => {
     );
   }
 
+  console.log('User:', user);
+
   return (
-    <div>
-      <h2>Service Provider</h2>
-      <p><Link href={'/settings'}>Update User (setting)</Link></p>
-      <button onClick={logout}>Logout</button>
-    </div>
+    <>
+      <Head>
+        <title>Service Provider Dashboard</title>
+        <meta name="description" content="Authentication system" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="bg-black py-12 px-4 sm:px-6 lg:px-8">
+        <div className='container mx-xl m-auto '>
+
+          <UserInfo user={user} />
+      <button onClick={logout} className='text-white'>Logout</button>
+
+        </div>
+      </div>
+    </>
   )
 }
 

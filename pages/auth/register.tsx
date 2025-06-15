@@ -22,14 +22,15 @@ export default function Register() {
   const { user } = useAuth();
 
   useEffect(() => {
-    const metadata = user?.user_metadata;
     const timer = setTimeout(async () => {
-      if (metadata && !metadata?.username) {
-        router.push('/auth/onboarding');
-      } else if (metadata && !metadata?.role) {
-        router.push('/auth/role-select');
-      } else if (user) {
-        router.push(`/dashboard/${metadata?.role}`);
+      if(user){
+        if (!user?.username) {
+          router.push('/auth/onboarding');
+        } else if (!user?.role) {
+          router.push('/auth/role-select');
+        } else {
+          router.push(`/dashboard/${user?.role}`);
+        }
       }
     }, 100);
     return () => clearTimeout(timer);
@@ -39,7 +40,6 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     setError('');
-
 
     // Validate phone number
     if (!phone) {
@@ -53,31 +53,23 @@ export default function Register() {
       return;
     }
 
-
-
     try {
       const encodedPhone = encodeURIComponent(phone);
 
-      // Check if user exists in users table
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users?phone=${encodedPhone}`);
-      const { data: existingUser } = await res.json();
-
-      if (existingUser) {
-        setError(<>
-          This phone number is already registered. Please login instead.<br />
-          <Link href="/auth/login">Click here to Login.</Link>
-        </>);
-        setShow(false);
-        return;
-      }
-
-      const { data, error } = await supabase.auth.signInWithOtp({
-        phone: phone,
-        options: { data: { display_name: name } }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+        method: 'POST',
+        body: JSON.stringify({
+          phone,
+          display_name: name
+        }),
+        headers: {
+          'Content-type': 'application/json'
+        }
       });
+      const { error: registrationError } = await res.json();
 
-      if (error) {
-        if (error.message.includes('User already registered')) {
+      if (registrationError) {
+        if (registrationError.includes('User already exist')) {
           setError(<>
             This phone number is already registered. Please login instead.<br />
             <Link href="/auth/login">Click here to Login.</Link>
@@ -85,18 +77,18 @@ export default function Register() {
           setShow(false);
           return;
         }
-        if (error.message.includes('Invalid parameter')) {
+        if (registrationError.includes('Invalid parameter')) {
           setError('Please enter a valid phone number in international format (e.g. +1234567890)');
           return;
         }
-        throw error;
+        throw registrationError;
       }
 
       // Pass phone number to verify page and store in session
       sessionStorage.setItem('registrationPhone', phone);
       router.push(`/auth/verify?phone=${encodedPhone}`);
     } catch (err: any) {
-      setError('Unable to send verification code. Please try again later.');
+      setError(`Unable to send verification code. Please try again later. (${err})`,);
     } finally {
       setLoading(false);
     }
@@ -105,7 +97,7 @@ export default function Register() {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Register</title>
         <meta name="description" content="Authentication system" />
         <link rel="icon" href="/favicon.ico" />
         <style>

@@ -3,7 +3,7 @@ import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
 
 export default function Settings() {
-  const { user, updateUserMetadata, session } = useAuth();
+  const { user } = useAuth();
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     displayName: '',
@@ -13,8 +13,8 @@ export default function Settings() {
   useEffect(() => {
     if (user) {
       setFormData({
-        displayName: formData.displayName || user.user_metadata?.display_name || '',
-        username: formData.username || user.user_metadata?.username || '',
+        displayName: formData.displayName || user.display_name || '',
+        username: formData.username || user.username || '',
       });
     }
   }, [user]);
@@ -23,30 +23,35 @@ export default function Settings() {
     e.preventDefault();
     try {
       setError('');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}`, {
-        method: 'PUT',
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/username`, {
+        method: 'PATCH',
         body: JSON.stringify({
-          display_name: formData.displayName,
           username: formData.username,
         }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
         }
       });
       const { error: updateError } = await res.json();
+
+      const dNameRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/display-name`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          display_name: formData.displayName,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const { error: updateNameError } = await dNameRes.json();
       
-      if (updateError){
-        if(updateError?.message?.includes('duplicate key')){
+      if (updateError || updateNameError){
+        if(updateError?.includes('duplicate key')){
           setError('That username is unavailable, please choose another.');
           return;
         } 
-        throw updateError;
+        throw updateError || updateNameError;
       } else {
-        updateUserMetadata({
-          display_name: formData.displayName,
-          username: formData.username,
-        });
         alert('Profile updated successfully');
       }
 
@@ -89,7 +94,7 @@ export default function Settings() {
           Save Changes
         </button>
       </form>
-      <p><Link href={`/dashboard/${user?.user_metadata?.role}`}>Go to dashboard</Link></p>
+      <p><Link href={`/dashboard/${user?.role}`}>Go to dashboard</Link></p>
       <p><Link href={`/auth/2fa-security`}>Add / Edit 2fa security</Link></p>
     </div>
   );
