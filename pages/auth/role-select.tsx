@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function RoleSelect() {
   const router = useRouter();
-  const { user, loading, session, updateUserMetadata } = useAuth();
+  const { user, loading } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -26,22 +26,20 @@ export default function RoleSelect() {
     try {
       setError('');
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}`, {
-        method: 'PUT',
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/role`, {
+        method: 'PATCH',
         body: JSON.stringify({ role }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
         }
       });
       const { error: updateError } = await res.json();
 
       if (updateError) throw updateError;
-      else updateUserMetadata({ role });
 
       router.push(`/auth/2fa-security`);
     } catch (err: any) {
-      setError(err.message);
+      setError(err);
     }
   };
 

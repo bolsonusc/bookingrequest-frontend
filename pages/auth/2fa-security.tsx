@@ -10,7 +10,7 @@ const Security = () => {
   const [error, setError] = useState(null);
   const [pageLoading, setPageLoading] = useState(true);
   const router = useRouter();
-  const { user, loading, session } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -28,6 +28,7 @@ const Security = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
+      const token = sessionStorage.getItem('token');
       // Send OTP for 2FA
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-otp`, {
         method: 'POST',
@@ -36,7 +37,7 @@ const Security = () => {
         }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${token}`,
         }
       });
       const result = await res.json();
@@ -125,7 +126,7 @@ const Security = () => {
             </div>
           </form>
 
-          <Link href={`/dashboard/${user?.user_metadata?.role}`} 
+          <Link href={`/dashboard/${user?.role}`} 
           className='text-center text-sm text-indigo-500 hover:text-indigo-500 mt-4 w-full block'>
           Remind me next time</Link>
         </div>

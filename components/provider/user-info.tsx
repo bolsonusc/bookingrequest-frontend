@@ -8,11 +8,11 @@ export const UserInfo = ({ user }) => {
                 <div className="flex items-center gap-4">
                     <a href="/provider/profile/">
                         <span className="w-15 h-15 rounded-full bg-[#22252A]  flex items-center justify-center text-white text-m">
-                            {user?.user_metadata?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || 'U'}
+                            {user?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || 'U'}
                         </span>
                     </a>
                     <div>
-                        <h1 className="text-xl font-semibold text-white">Hello, {user?.user_metadata?.display_name || user?.email || 'User'}!</h1>
+                        <h1 className="text-xl font-semibold text-white">Hello, {user?.display_name || user?.email || 'User'}!</h1>
                         <p className="text-sm text-muted-foreground text-white-200">Manage your bookings and invoices</p>
                     </div>
                 </div>
