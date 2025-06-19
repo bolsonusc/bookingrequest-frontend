@@ -7,7 +7,7 @@ import Link from 'next/link';
 const Client = () => {
 
   const router = useRouter();
-  const { supabase, loading, user } = useAuth();
+  const { loading, user } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Client = () => {
       setPageLoading(false);
     }
 
-    if(user && user?.user_metadata?.role === 'provider'){
+    if(user && user?.role === 'provider'){
       router.push('/dashboard/provider');
       return;
     }
@@ -28,7 +28,9 @@ const Client = () => {
   }, [user, loading, router]);
 
   const logout = async() => {
-    await supabase.auth.signOut();
+    // await supabase.auth.signOut();
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('refreshToken');
     router.push('/auth/login');
   }
 

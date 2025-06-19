@@ -8,7 +8,7 @@ import { generateUsername } from 'unique-username-generator';
 
 const Onboarding = () => {
   const router = useRouter();
-  const { user, loading, session, updateUserMetadata } = useAuth();
+  const { user, loading } = useAuth();
   const [error, setError] = useState('');
   const [username, setUsername] = useState('');
   const [pageLoading, setPageLoading] = useState(true);
@@ -24,7 +24,7 @@ const Onboarding = () => {
     }
 
     const uniqueUsername = generateUsername("", 3, 15);
-    setUsername(user?.user_metadata?.username || uniqueUsername);
+    setUsername(user?.username || uniqueUsername);
 
   }, [user, loading, router]);
 
@@ -32,28 +32,26 @@ const Onboarding = () => {
     e.preventDefault();
     try {
       setError('');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}`, {
-        method: 'PUT',
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/username`, {
+        method: 'PATCH',
         body: JSON.stringify({ username }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
         }
       });
       const { error: updateError } = await res.json();
 
       if (updateError) {
-        if (updateError?.message?.includes('duplicate key')) {
+        if (updateError?.includes('duplicate key')) {
           setError('That username is unavailable, please choose another.');
           return;
         }
         throw updateError;
       }
-      else updateUserMetadata({ username });
 
       router.push('/auth/role-select');
     } catch (err: any) {
-      setError(err.message);
+      setError(err);
     }
   }
 

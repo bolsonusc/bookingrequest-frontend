@@ -10,7 +10,7 @@ const VerifyEmail = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const { user, session, updateUserMetadata } = useAuth();
+  const { user } = useAuth();
   const { email } = router.query;
 
   const handleVerify = async (e: React.FormEvent) => {
@@ -25,6 +25,7 @@ const VerifyEmail = () => {
     }
 
     try {
+      const token = sessionStorage.getItem('token');
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/verify-otp`, {
         method: 'POST',
         body: JSON.stringify({
@@ -34,7 +35,7 @@ const VerifyEmail = () => {
         }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${token}`,
         }
       });
 
@@ -43,9 +44,7 @@ const VerifyEmail = () => {
       if (!res.ok) {
         throw result.message;
       } else {
-        const metadata = user?.user_metadata;
-        updateUserMetadata({ secure: true });
-        router.push(`/dashboard/${metadata?.role}`);
+        router.push(`/dashboard/${user?.role}`);
       }
 
     } catch (err: any) {
@@ -132,7 +131,7 @@ const VerifyEmail = () => {
                 {loading ? 'Verifying...' : 'Verify Code'}
               </button>
             </form>
-            <Link href={`/dashboard/${user?.user_metadata?.role}`} >Remind me next time</Link>
+            <Link href={`/dashboard/${user?.role}`} >Remind me next time</Link>
           </div>
         </div>
       </div>

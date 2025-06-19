@@ -1,7 +1,6 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabase/client';
 import Link from 'next/link';
 
 
@@ -24,65 +23,54 @@ export default function Verify() {
     }
 
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        phone: queryPhone.toString(),
-        token: otp,
-        type: 'sms'
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          phone: queryPhone.toString(),
+          token: otp
+        }),
+        headers: {
+          'Content-type': 'application/json'
+        }
       });
+      const {error : verificationError,  user, token, refreshToken} = await res.json();
 
-      if (error) {
-        if (error.message?.includes('Invalid OTP')) {
-          setError('Invalid verification code. Please try again.');
+      if (verificationError) {
+        if (verificationError.includes('Invalid OTP')) {
+          setError(<Link href={'/auth/login'}>
+            Invalid verification code. Please try again. Or request a new one here.
+            </Link>);
           return;
         }
-        if (error.message?.includes('Token has expired')) {
+        if (verificationError.includes('user not found')) {
+          setError(<Link href={'/auth/register'}>
+            This user does not exist. Please register here.
+            </Link>);
+          return;
+        }
+        if (verificationError.includes('Token not received')) {
           setError(<Link href={'/auth/login'}>
             OTP has expired. Please request a new one here.
             </Link>);
           return;
         }
-        throw error;
-        
+        throw verificationError;
       }
 
-      // Check if user exists in users table
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${data.user?.id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${data.session.access_token}`,
+      // store refresh token & token for future use
+      sessionStorage.setItem('refreshToken', refreshToken);
+      sessionStorage.setItem('token', token);
+
+      if(user){
+        if (!user.username) {
+          router.push('/auth/success');
+        } else if (!user.role) {
+          router.push('/auth/role-select');
+        } else if (!user.email) {
+          router.push('/auth/2fa-security');
+        } else if (user.username && user.role) {
+          router.push(`/dashboard/${user?.role}`);
         }
-      });
-      const { data: existingUser } = await res.json();
-
-      // If user doesn't exist, create new user record
-      if (!existingUser && data.user) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
-          method: 'POST',
-          body: JSON.stringify({
-            id: data.user.id,
-            phone: queryPhone.toString(),
-            user_type: 'pending',
-            display_name: data.user.user_metadata?.display_name
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${data.session.access_token}`,
-          }
-        });
-        const { error: insertError } = await res.json();
-
-        if (insertError) throw insertError;
-      }
-
-      const metadata = data?.user?.user_metadata;
-      if (metadata && !metadata.username) {
-        router.push('/auth/success');
-      } else if (metadata && !metadata.role) {
-        router.push('/auth/role-select');
-      } else if (metadata && !metadata.secure) {
-        router.push('/auth/2fa-security');
-      } else if (metadata && metadata.username && metadata.role) {
-        router.push(`/dashboard/${metadata?.role}`);
       }
 
     } catch (err: any) {

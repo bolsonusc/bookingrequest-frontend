@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from "next/head";
-import { supabase } from '../../lib/supabase/client';
 import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
 import PhoneInput, {
@@ -21,14 +20,15 @@ export default function Login() {
   const { user } = useAuth();
 
   useEffect(() => {
-    const metadata = user?.user_metadata;
     const timer = setTimeout(async () => {
-      if (metadata && !metadata?.username) {
-        router.push('/auth/onboarding');
-      } else if (metadata && !metadata?.role) {
-        router.push('/auth/role-select');
-      } else if (user) {
-        router.push(`/dashboard/${metadata?.role}`);
+      if(user){
+        if (!user?.username) {
+          router.push('/auth/onboarding');
+        } else if (!user?.role) {
+          router.push('/auth/role-select');
+        } else {
+          router.push(`/dashboard/${user?.role}`);
+        }
       }
     }, 100);
     return () => clearTimeout(timer);
@@ -38,7 +38,6 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setError('');
-
 
     // Validate phone number
     if (!phone) {
@@ -53,28 +52,24 @@ export default function Login() {
     }
 
     try {
-      // Check if user exists in users table
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users?phone=${encodeURIComponent(phone)}`);
-      const { data: existingUser } = await res.json();
 
-      if (!existingUser) {
-        setError(<>
-          This phone number is not registered. Please register instead.<br />
-          <Link href={"/auth/register"}>Click here to register.</Link>
-        </>);
-        setShow(false);
-        return;
-      }
-      const { data, error } = await supabase.auth.signInWithOtp({
-        phone: phone,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/request-otp`, {
+        method: 'POST',
+        body: JSON.stringify({
+          phone
+        }),
+        headers: {
+          'Content-type': 'application/json'
+        }
       });
+      const { error: otpError } = await res.json();
 
-      if (error) {
-        if (error.message.includes('Invalid parameter')) {
+      if (otpError) {
+        if (otpError.includes('Invalid parameter')) {
           setError('Please enter a valid phone number in international format (e.g. +1234567890)');
           return;
         }
-        throw error;
+        throw otpError;
       }
 
       // Store phone in session storage for later use

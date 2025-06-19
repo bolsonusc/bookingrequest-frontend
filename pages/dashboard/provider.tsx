@@ -9,7 +9,7 @@ import { UserInfo } from '../../components/provider/user-info';
 const Provider = () => {
 
   const router = useRouter();
-  const { supabase, loading, user } = useAuth();
+  const { loading, user } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -22,14 +22,16 @@ const Provider = () => {
       setPageLoading(false);
     }
 
-    if (user && user?.user_metadata?.role === 'client') {
+    if (user && user?.role === 'client') {
       router.push('/dashboard/client');
       return;
     }
   }, [user, loading, router]);
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    // await supabase.auth.signOut();
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('refreshToken');
     router.push('/auth/login');
   }
 
@@ -54,7 +56,7 @@ const Provider = () => {
         <div className='container mx-xl m-auto '>
 
           <UserInfo user={user} />
-      <button onClick={logout}>Logout</button>
+      <button onClick={logout} className='text-white'>Logout</button>
 
         </div>
       </div>

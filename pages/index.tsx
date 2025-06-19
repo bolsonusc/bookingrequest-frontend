@@ -11,16 +11,17 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(()=>{
-    const metadata = user?.user_metadata;
     const timer = setTimeout(async () => {
-      if(metadata && !metadata?.username){
-        router.push('/auth/onboarding');
-      } else if(metadata && !metadata?.role) {
-        router.push('/auth/role-select');
-      } else if(metadata && !metadata.secure){
-        router.push('/auth/2fa-security');
-      } else if(user) {
-        router.push(`/dashboard/${metadata?.role}`);
+      if(user){
+        if(!user?.username){
+          router.push('/auth/onboarding');
+        } else if(!user?.role) {
+          router.push('/auth/role-select');
+        } else if(!user.email){
+          router.push('/auth/2fa-security');
+        } else if(user) {
+          router.push(`/dashboard/${user?.role}`);
+        }
       }
     }, 100);
     return () => clearTimeout(timer);
