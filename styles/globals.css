@@ -7,7 +7,7 @@ body {
 
 @layer utilities {
   .text-white-200 {
-    color: rgb(255, 255, 255, 0.5);
+    color: #ABB0BA;
   }
   .btn-blue {
     @apply w-full flex justify-center py-3 px-4 border border-transparent 

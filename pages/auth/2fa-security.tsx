@@ -55,7 +55,7 @@ const Security = () => {
 
   if (pageLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
         <div className="text-xl">Loading...</div>
       </div>
     );
@@ -72,7 +72,7 @@ const Security = () => {
       <div className="min-h-screen flex flex-wrap items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
         <div>
           <div>
-           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Security</h2>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Security</h2>
             <p className="mt-2 text-center text-white-200">
               Keep your account safe by adding your email for extra protection.
             </p>
@@ -126,9 +126,9 @@ const Security = () => {
             </div>
           </form>
 
-          <Link href={`/dashboard/${user?.role}`} 
-          className='text-center text-sm text-indigo-500 hover:text-indigo-500 mt-4 w-full block'>
-          Remind me next time</Link>
+          <Link href={`/dashboard/${user?.role}`}
+            className='text-center text-sm text-indigo-500 hover:text-indigo-500 mt-4 w-full block'>
+            Remind me next time</Link>
         </div>
       </div>
     </>

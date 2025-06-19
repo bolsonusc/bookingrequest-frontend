@@ -45,7 +45,7 @@ export default function RoleSelect() {
 
   if (pageLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
         <div className="text-xl">Loading...</div>
       </div>
     );

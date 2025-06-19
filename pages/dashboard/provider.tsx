@@ -5,6 +5,8 @@ import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
 import Head from 'next/head';
 import { UserInfo } from '../../components/provider/user-info';
+import { BookingCard } from '../../components/provider/booking-card';
+import { InvoiceCard } from '../../components/provider/invoice-card';
 
 const Provider = () => {
 
@@ -37,13 +39,12 @@ const Provider = () => {
 
   if (pageLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
         <div className="text-xl">Loading...</div>
       </div>
     );
   }
 
-  console.log('User:', user);
 
   return (
     <>
@@ -56,7 +57,90 @@ const Provider = () => {
         <div className='container mx-xl m-auto '>
 
           <UserInfo user={user} />
-      <button onClick={logout} className='text-white'>Logout</button>
+          <div>
+            <div className="mt-4 flex items-center justify-between">
+              <h3 className="text-xl font-normal text-white">Upcoming Approved</h3>
+              <Link href="/provider/bookings" className="text-blue-500 hover:text-blue-700">
+                View All
+              </Link>
+            </div>
+
+            <BookingCard
+              info={{
+                title: 'Website Design Consultation',
+                date: '2023-10-01',
+                time: '15:00 .45 min',
+                note: 'Want to discuss website redesign for my company',
+                status: 'unpaid',
+                with: 'Emma Wilson',
+                invoice: 'INV-007'
+              }}
+              user={user}
+            />
+          </div>
+          <div>
+            <div className="mt-15 flex items-center justify-between">
+              <h3 className="text-xl font-normal text-white">Pending Requests</h3>
+              <Link href="/provider/bookings" className="text-blue-500 hover:text-blue-700">
+                View All
+              </Link>
+            </div>
+
+            <BookingCard
+              info={{
+                title: 'Website Design Consultation',
+                date: '2023-10-01',
+                time: '15:00 .45 min',
+                status: 'paid',
+                with: 'Emma Wilson',
+                invoice: 'INV-007',
+                note: ''
+              }}
+              user={user}
+            />
+
+            <BookingCard
+              info={{
+                title: 'Website Design Consultation',
+                date: '2023-10-01',
+                time: '15:00 .45 min',
+                status: 'paid',
+                with: 'Emma Wilson',
+                invoice: 'INV-007'
+              }}
+              user={user}
+            />
+          </div>
+          <div>
+            <div className="mt-15 flex items-center justify-between">
+              <h3 className="text-xl font-normal text-white">Recent Invoice</h3>
+              <Link href="/provider/bookings" className="text-blue-500 hover:text-blue-700">
+                View All
+              </Link>
+            </div>
+
+            <InvoiceCard
+              info={{
+                  date: '2023-10-01',
+                status: 'unpaid',
+                with: 'Emma Wilson',
+                invoice: 'INV-007',
+                amount: '$150.00'
+              }}
+              user={user}
+            />
+
+            <InvoiceCard
+              info={{
+                date: '2023-10-01',
+                status: 'paid',
+                with: 'Emma Wilson',
+                invoice: 'INV-007',
+                amount: '$150.00'
+              }}
+              user={user}
+            />
+          </div>
 
         </div>
       </div>
