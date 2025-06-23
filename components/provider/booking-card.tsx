@@ -1,19 +1,35 @@
 import React, { useState } from 'react'
+import Image from 'next/image';
+
 
 export const BookingCard = ({ user, info }) => {
     let statusClass = 'bg-gray-500'; // default
 
-    if (info.status === 'paid') {
+    if (info.paymentStatus === 'paid') {
         statusClass = 'bg-green-500';
-    } else if (info.status === 'unpaid') {
+    } else if (info.paymentStatus === 'unpaid') {
         statusClass = 'bg-amber-400';
-    } else if (info.status === 'cancelled') {
+    } else if (info.paymentStatus === 'cancelled') {
         statusClass = 'bg-red-500';
     }
 
+    const [showPopup, setShowPopup] = useState(false);
+    const infoclick = () => {
+        setShowPopup(true);
+
+    }
+    const closePopup = () => {
+        // Handle close popup event
+        setShowPopup(false);
+    }
+
+
     return (
         <>
-            <div className='bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative'>
+            <div
+                className='bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer'
+                onClick={infoclick}
+            >
                 <div className='flex items-center justify-between'>
                     <div className={`w-[8px] h-[8px] rounded-full ${statusClass} absolute top-5 left-5`}></div>
                     <h4 className='text-white text-m font-medium'>
@@ -26,15 +42,11 @@ export const BookingCard = ({ user, info }) => {
                 </div>
                 <div className='flex flex-col '>
                     <p className='text-sm text-white-200 flex items-center gap-2 mb-3'>
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14.625 2.25H12.9375V1.6875C12.9375 1.53832 12.8782 1.39524 12.7727 1.28975C12.6673 1.18426 12.5242 1.125 12.375 1.125C12.2258 1.125 12.0827 1.18426 11.9773 1.28975C11.8718 1.39524 11.8125 1.53832 11.8125 1.6875V2.25H6.1875V1.6875C6.1875 1.53832 6.12824 1.39524 6.02275 1.28975C5.91726 1.18426 5.77418 1.125 5.625 1.125C5.47582 1.125 5.33274 1.18426 5.22725 1.28975C5.12176 1.39524 5.0625 1.53832 5.0625 1.6875V2.25H3.375C3.07663 2.25 2.79048 2.36853 2.5795 2.5795C2.36853 2.79048 2.25 3.07663 2.25 3.375V14.625C2.25 14.9234 2.36853 15.2095 2.5795 15.4205C2.79048 15.6315 3.07663 15.75 3.375 15.75H14.625C14.9234 15.75 15.2095 15.6315 15.4205 15.4205C15.6315 15.2095 15.75 14.9234 15.75 14.625V3.375C15.75 3.07663 15.6315 2.79048 15.4205 2.5795C15.2095 2.36853 14.9234 2.25 14.625 2.25ZM5.0625 3.375V3.9375C5.0625 4.08668 5.12176 4.22976 5.22725 4.33525C5.33274 4.44074 5.47582 4.5 5.625 4.5C5.77418 4.5 5.91726 4.44074 6.02275 4.33525C6.12824 4.22976 6.1875 4.08668 6.1875 3.9375V3.375H11.8125V3.9375C11.8125 4.08668 11.8718 4.22976 11.9773 4.33525C12.0827 4.44074 12.2258 4.5 12.375 4.5C12.5242 4.5 12.6673 4.44074 12.7727 4.33525C12.8782 4.22976 12.9375 4.08668 12.9375 3.9375V3.375H14.625V5.625H3.375V3.375H5.0625ZM14.625 14.625H3.375V6.75H14.625V14.625Z" fill="#ABB0BA" />
-                        </svg>
+                        <Image src="/calendar.svg" alt="Calendar Icon" width={18} height={18} />
                         {info?.date}
                     </p>
                     <p className='text-sm text-white-200 flex items-center gap-2'>
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 1.6875C7.55373 1.6875 6.13993 2.11637 4.9374 2.91988C3.73486 3.72339 2.7976 4.86544 2.24413 6.20163C1.69067 7.53781 1.54586 9.00811 1.82801 10.4266C2.11017 11.8451 2.80661 13.148 3.82928 14.1707C4.85196 15.1934 6.15492 15.8898 7.57341 16.172C8.99189 16.4541 10.4622 16.3093 11.7984 15.7559C13.1346 15.2024 14.2766 14.2651 15.0801 13.0626C15.8836 11.8601 16.3125 10.4463 16.3125 9C16.3105 7.06123 15.5394 5.20246 14.1685 3.83154C12.7975 2.46063 10.9388 1.68955 9 1.6875ZM9 15.1875C7.77623 15.1875 6.57994 14.8246 5.56241 14.1447C4.54488 13.4648 3.75182 12.4985 3.2835 11.3679C2.81518 10.2372 2.69265 8.99314 2.93139 7.79288C3.17014 6.59262 3.75944 5.49011 4.62478 4.62478C5.49012 3.75944 6.59262 3.17014 7.79288 2.93139C8.99314 2.69264 10.2372 2.81518 11.3679 3.2835C12.4985 3.75181 13.4648 4.54488 14.1447 5.56241C14.8246 6.57994 15.1875 7.77623 15.1875 9C15.1856 10.6405 14.5331 12.2132 13.3732 13.3732C12.2132 14.5331 10.6405 15.1856 9 15.1875ZM13.5 9C13.5 9.14918 13.4407 9.29226 13.3353 9.39775C13.2298 9.50324 13.0867 9.5625 12.9375 9.5625H9C8.85082 9.5625 8.70775 9.50324 8.60226 9.39775C8.49677 9.29226 8.4375 9.14918 8.4375 9V5.0625C8.4375 4.91332 8.49677 4.77024 8.60226 4.66475C8.70775 4.55926 8.85082 4.5 9 4.5C9.14919 4.5 9.29226 4.55926 9.39775 4.66475C9.50324 4.77024 9.5625 4.91332 9.5625 5.0625V8.4375H12.9375C13.0867 8.4375 13.2298 8.49676 13.3353 8.60225C13.4407 8.70774 13.5 8.85082 13.5 9Z" fill="#ABB0BA" />
-                        </svg>
+                        <Image src="/clock.svg" alt="Clock Icon" width={18} height={18} />
                         {info?.time}
                     </p>
                 </div>
@@ -48,6 +60,93 @@ export const BookingCard = ({ user, info }) => {
                     </div>
                 ) : null}
             </div>
+
+            {showPopup && (
+                <div className='fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.8)] z-50'>
+                    <div className='relative bg-[#16171A] w-[450px] rounded-lg  p-6 flex flex-col gap-3 my-4 border border-[#2E2F31] transform transition-all duration-300 scale-95 animate-fadeIn'>
+
+                        <button
+                            onClick={closePopup}
+                            className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4 text-white">
+                                <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
+                            </svg>
+                        </button>
+
+
+                        <h2 className='text-lg font-bold mb-0 text-white'>
+                            <div className={`w-[8px] h-[8px] rounded-full ${statusClass} inline-block`}></div>&nbsp;&nbsp;&nbsp; {info?.title} </h2>
+                        <p className='text-sm  block font-light pt-2 text-white-200'>with {info?.with}</p>
+
+                        <div className='flex flex-col py-1.5'>
+                            <p className='text-sm text-white-200 flex items-center gap-2 mb-2'>
+                                <Image src="/calendar.svg" alt="Calendar Icon" width={18} height={18} />
+                                {info?.date}
+                            </p>
+                            <p className='text-sm text-white-200 flex items-center gap-2'>
+                                <Image src="/clock.svg" alt="Clock Icon" width={18} height={18} />
+                                {info?.time}
+                            </p>
+                        </div>
+
+                        {info?.note && info.note.trim() !== '' ? (
+                            <div className='bg-[#1C1E22] rounded-lg p-3 mt-2'>
+                                <p className='text-white text-sm'>Note:</p>
+                                <p className='text-sm text-white-200 mt-1'>
+                                    {info?.note}
+                                </p>
+                            </div>
+                        ) : null}
+
+
+                        <div className='mt-2'>
+                            {info?.status === 'approved' ? (
+                                <div>
+                                    <button className='bg-yellow-500 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-yellow-600'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-text h-4 w-4">
+                                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                                            <path d="M10 9H8" />
+                                            <path d="M16 13H8" />
+                                            <path d="M16 17H8" />
+                                        </svg>
+                                        View Invoice ({info?.invoice})
+                                    </button>
+
+                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-600'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen h-4 w-4">
+                                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                                        </svg>
+                                        Modify Appointment
+                                    </button>
+                                </div>
+                            ) : info?.status === 'pending' ? (
+                                <div>
+                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check h-4 w-4"><path d="M20 6 9 17l-5-5"></path></svg>
+                                        Accept Appointment
+                                    </button>
+
+                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-400'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen h-4 w-4">
+                                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                                        </svg>
+                                        Edit Appointment
+                                    </button>
+
+                                    <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-x h-4 w-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                        Decline Appointment
+                                    </button>
+
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </>
     )
 }

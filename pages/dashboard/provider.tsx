@@ -67,11 +67,12 @@ const Provider = () => {
 
             <BookingCard
               info={{
-                title: 'Website Design Consultation',
+                title: 'Website Design Consultation1',
                 date: '2023-10-01',
                 time: '15:00 .45 min',
                 note: 'Want to discuss website redesign for my company',
-                status: 'unpaid',
+                paymentStatus: 'unpaid',
+                status: 'approved',
                 with: 'Emma Wilson',
                 invoice: 'INV-007'
               }}
@@ -88,10 +89,11 @@ const Provider = () => {
 
             <BookingCard
               info={{
-                title: 'Website Design Consultation',
+                title: 'Website Design Consultation2',
                 date: '2023-10-01',
                 time: '15:00 .45 min',
-                status: 'paid',
+                paymentStatus: 'paid',
+                status: 'pending',
                 with: 'Emma Wilson',
                 invoice: 'INV-007',
                 note: ''
@@ -101,10 +103,11 @@ const Provider = () => {
 
             <BookingCard
               info={{
-                title: 'Website Design Consultation',
+                title: 'Website Design Consultation3',
                 date: '2023-10-01',
                 time: '15:00 .45 min',
-                status: 'paid',
+                paymentStatus: 'paid',
+                status: 'pending',
                 with: 'Emma Wilson',
                 invoice: 'INV-007'
               }}
@@ -121,7 +124,7 @@ const Provider = () => {
 
             <InvoiceCard
               info={{
-                  date: '2023-10-01',
+                date: '2023-10-01',
                 status: 'unpaid',
                 with: 'Emma Wilson',
                 invoice: 'INV-007',
@@ -143,6 +146,8 @@ const Provider = () => {
           </div>
 
         </div>
+
+
       </div>
     </>
   )
