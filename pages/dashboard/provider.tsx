@@ -128,7 +128,10 @@ const Provider = () => {
                 status: 'unpaid',
                 with: 'Emma Wilson',
                 invoice: 'INV-007',
-                amount: '$150.00'
+                amount: '$150.00',
+                email: 'sdfokf@gmail.com',
+                time: '15:00 .45 min',
+                title: 'Website Design Consultation',
               }}
               user={user}
             />
@@ -139,7 +142,10 @@ const Provider = () => {
                 status: 'paid',
                 with: 'Emma Wilson',
                 invoice: 'INV-007',
-                amount: '$150.00'
+                amount: '$150.00',
+                email: 'sdfokf@gmail.com',
+                time: '15:00 .45 min',
+                title: 'Website Design Consultation',
               }}
               user={user}
             />
