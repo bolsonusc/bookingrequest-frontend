@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 
 export const UserInfo = ({ user }) => {
-    console.log('UserInfo Component:', user);
     return (
         <>
-            <header className="px-6 py-5 flex items-center justify-between">
+            <header className=" py-5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <a href="/dashboard/profile/">
                         <span className="w-15 h-15 rounded-full bg-[#22252A]  flex items-center justify-center text-white text-m">

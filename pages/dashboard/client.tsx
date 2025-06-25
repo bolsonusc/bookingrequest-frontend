@@ -20,14 +20,14 @@ const Client = () => {
       setPageLoading(false);
     }
 
-    if(user && user?.role === 'provider'){
+    if (user && user?.role === 'provider') {
       router.push('/dashboard/provider');
       return;
     }
 
   }, [user, loading, router]);
 
-  const logout = async() => {
+  const logout = async () => {
     // await supabase.auth.signOut();
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('refreshToken');
@@ -36,7 +36,7 @@ const Client = () => {
 
   if (pageLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
         <div className="text-xl">Loading...</div>
       </div>
     );
