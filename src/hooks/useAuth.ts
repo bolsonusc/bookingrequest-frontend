@@ -1,5 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const supabase = createClient(
@@ -11,6 +12,7 @@ export function useAuth() {
   const [user, setUser] = useState(null);
   const [isValidToken, setIsValidToken] = useState(false);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     getUser();
@@ -75,6 +77,9 @@ export function useAuth() {
         setUser(authUser);
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('refreshToken', refreshToken);
+      } else {
+        router.push('/auth/login');
+        console.log(error);
       }
     } catch (error) {
       console.error(error);
