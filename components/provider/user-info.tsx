@@ -5,7 +5,7 @@ export const UserInfo = ({ user }) => {
         <>
             <header className=" py-5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <a href="/provider/profile/">
+                    <a href="/dashboard/profile/">
                         <span className="w-15 h-15 rounded-full bg-[#22252A]  flex items-center justify-center text-white text-m">
                             {user?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || 'U'}
                         </span>

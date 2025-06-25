@@ -9,6 +9,34 @@ body {
   .text-white-200 {
     color: #ABB0BA;
   }
+  .text-white-950 {
+    color: rgba(248, 250, 252, 1);
+  }
+  .text-white-250 {
+    color: rgba(171, 176, 186, 1);
+  }
+  .border-gray {
+    border-color: rgba(34, 37, 42, 1)
+  }
+  .bg-gray-950 {
+    background-color: rgba(28, 30, 34, 1);
+  }
+  .bg-black-950 {
+    background-color: rgba(11, 12, 14, 1);
+  }
+  .selected-date {
+    background-color: rgba(29, 79, 215, 0.1);
+    color: rgba(29, 79, 215, 1);
+    border: 1px solid rgba(29, 79, 215, 1);
+  }
+  .profile-image{
+    width: 94px;
+    height: 94px;
+    margin: 45px 25px;
+    border-radius: 9999px;
+    border: 1px solid #FFFFFF1A;
+    color: rgba(248, 250, 252, 1);
+  }
   .btn-blue {
     @apply w-full flex justify-center py-3 px-4 border border-transparent 
     rounded-md shadow-sm text-sm font-medium text-white 
