@@ -28,7 +28,7 @@ export function useAuth() {
       });
       const { user: authUser, error } = await res.json();
       if(error){
-        validateToken();
+        await validateToken();
       }
       setUser(authUser);
       setLoading(false);
@@ -52,7 +52,7 @@ export function useAuth() {
       const { user_id, error } = await res.json();
       if(!error) setIsValidToken(true);
       else {
-        refreshToken()
+        await refreshToken()
       };
       setLoading(false);
     } catch (error) {
@@ -77,6 +77,7 @@ export function useAuth() {
         setUser(authUser);
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('refreshToken', refreshToken);
+        await getUser();
       } else {
         router.push('/auth/login');
         console.log(error);
