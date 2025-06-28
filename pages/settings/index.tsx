@@ -1,101 +1,59 @@
-import { useEffect, useState } from 'react';
 import { useAuth } from '../../src/hooks/useAuth';
-import Link from 'next/link';
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+import NavigateButton from './NavigateButton';
 
 export default function Settings() {
   const { user } = useAuth();
-  const [error, setError] = useState('');
-  const [formData, setFormData] = useState({
-    displayName: '',
-    username: '',
-  });
-
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        displayName: formData.displayName || user.display_name || '',
-        username: formData.username || user.username || '',
-      });
-    }
-  }, [user]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setError('');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/username`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          username: formData.username,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const { error: updateError } = await res.json();
-
-      const dNameRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/display-name`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          display_name: formData.displayName,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const { error: updateNameError } = await dNameRes.json();
-      
-      if (updateError || updateNameError){
-        if(updateError?.includes('duplicate key')){
-          setError('That username is unavailable, please choose another.');
-          return;
-        } 
-        throw updateError || updateNameError;
-      } else {
-        alert('Profile updated successfully');
-      }
-
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  const router = useRouter();
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
-      <h1 className="text-2xl font-bold mb-6">Account Settings</h1>
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-2">Username</label>
-          <input
-            type="text"
-            value={formData.username}
-            onChange={(e) => setFormData({...formData, username: e.target.value})}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-2">Display Name</label>
-          <input
-            type="text"
-            value={formData.displayName}
-            onChange={(e) => setFormData({...formData, displayName: e.target.value})}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Save Changes
+    <div className='bg-[#0B0C0E] text-white flex flex-col items-center min-w-screen'>
+      <Head>
+        <title>Settings</title>
+        <meta name="description" content="Settings" />
+        <link rel="icon" href="/favicon.ico" />
+        <style>
+          {`
+            .PhoneInputCountrySelect option  {
+              color: #1E1E1E;
+            }
+            .PhoneInputInput:focus {
+              outline: none;
+            }
+            .PhoneInputInput{
+              padding-left: 10px;
+            }
+          `}
+        </style>
+      </Head>
+
+      {/* ===== HEADER BAR ===== */}
+      <header className="h-[65px] w-screen sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
+        <button className='basis-2/100 w-8 cursor-pointer' onClick={()=>router.back()}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m0 0l7-7m-7 7l7 7" />
+          </svg>
         </button>
-      </form>
-      <p><Link href={`/dashboard/${user?.role}`}>Go to dashboard</Link></p>
-      <p><Link href={`/auth/2fa-security`}>Add / Edit 2fa security</Link></p>
+        <p className='font-normal text-lg leading-7 text-white-950 basis-90/100'>Settings</p>
+      </header>
+
+      {/* ===== MAIN PAGE ===== */}
+      <div className='bg-black-950 my-8 mx-6 flex flex-col justify-center'>
+        <NavigateButton title='Dashboard' desc='Return to your dashboard' link={`/dashboard/${user?.role}`} icon='dashboard' />
+        <span className='text-center my-2 ml-4 text-white-950'>Account Settings</span>
+        <NavigateButton title='View Public Profile' desc='See how clients view your profile' link={`/dashboard/profile`} icon='eye' />
+        <NavigateButton title='Account Status' desc='Set your profile visibility' link={`#`} icon='globe' />
+        <NavigateButton title='Contact Information' desc='Update your email and phone number' link={`#`} icon='mail' />
+        <NavigateButton title='Services Offered' desc='Select the services you provide' link={`#`} icon='services' />
+        <NavigateButton title='Invoice Settings' desc='Configure tax rates and invoice defaults' link={`#`} icon='invoice' />
+        <NavigateButton title='History' desc='View past appointments and activities' link={`#`} icon='history' />
+        <NavigateButton title='Availability' desc='Set your working hours' link={`#`} icon='clock' />
+        <NavigateButton title='Subscription' desc='Manage your subscription plan' link={`#`} icon='calendar' />
+        <NavigateButton title='Password' desc='Update your password' link={`#`} icon='key' />
+        <NavigateButton title='Payment Integration' desc='Connect your Stripe account' link={`#`} icon='wallet' />
+        <NavigateButton title='Export Data' desc='Download or email your history' link={`#`} icon='download' />
+      </div>
     </div>
   );
 }
