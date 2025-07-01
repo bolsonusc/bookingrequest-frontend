@@ -8,7 +8,7 @@ export default function Settings() {
   const router = useRouter();
 
   return (
-    <div className='bg-[#0B0C0E] text-white flex flex-col items-center min-w-screen'>
+    <div className='bg-[#0B0C0E] text-white flex flex-col items-center w-full '>
       <Head>
         <title>Settings</title>
         <meta name="description" content="Settings" />
@@ -29,7 +29,7 @@ export default function Settings() {
       </Head>
 
       {/* ===== HEADER BAR ===== */}
-      <header className="h-[65px] w-screen sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
+      <header className="h-[65px] w-full sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
         <button className='basis-2/100 w-8 cursor-pointer' onClick={()=>router.back()}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m0 0l7-7m-7 7l7 7" />
