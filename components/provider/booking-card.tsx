@@ -1,8 +1,15 @@
+"use client";
 import React, { useState } from 'react'
 import Image from 'next/image';
-
+import { DayPicker } from "react-day-picker";
+import 'react-day-picker/dist/style.css';
 
 export const BookingCard = ({ user, info }) => {
+
+    const [selectedDate, setSelectedDate] = useState(new Date(2023, 9, 1)); // Oct 1, 2023
+
+    console.log(info?.time);
+
     let statusClass = 'gray-500'; // default
     let mainstatusClass = 'bg-gray-600'; // default
 
@@ -34,6 +41,18 @@ export const BookingCard = ({ user, info }) => {
     const closeInvoicePopup = () => {
         // Handle close invoice popup event
         setShowInvoicePopup(false);
+    }
+
+
+    // Modify appointment popup state
+    const [showModifyPopup, setShowModifyPopup] = useState(false);
+
+    const modifyAppointment = () => {
+        setShowModifyPopup(true);
+    }
+
+    const closeModifyPopup = () => {
+        setShowModifyPopup(false);
     }
 
 
@@ -127,7 +146,7 @@ export const BookingCard = ({ user, info }) => {
                                         View Invoice ({info?.invoice})
                                     </button>
 
-                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-600'>
+                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-600 cursor-pointer' onClick={modifyAppointment}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen h-4 w-4">
                                             <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
                                         </svg>
@@ -141,7 +160,7 @@ export const BookingCard = ({ user, info }) => {
                                         Accept Appointment
                                     </button>
 
-                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-400'>
+                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-400 cursor-pointer' onClick={modifyAppointment}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen h-4 w-4">
                                             <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
                                         </svg>
@@ -160,7 +179,7 @@ export const BookingCard = ({ user, info }) => {
                 </div>
             )}
 
-            {showInvoicePopup  && (
+            {showInvoicePopup && (
                 <div className='fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.8)] z-50'>
                     <div className='relative bg-[#16171A] w-[600px] rounded-lg  px-10 py-6 flex flex-col  my-4 border border-[#2E2F31] transform transition-all duration-300 scale-95 animate-fadeIn'>
 
@@ -209,12 +228,12 @@ export const BookingCard = ({ user, info }) => {
 
 
                             <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-link h-4 w-4"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-link h-4 w-4"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                                 Share URL
                             </button>
 
                             <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-refresh-ccw h-4 w-4"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-ccw h-4 w-4"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>
                                 Refund Invoice
                             </button>
 
@@ -249,6 +268,96 @@ export const BookingCard = ({ user, info }) => {
 
                             </ul>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {showModifyPopup && (
+                <div className='fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.8)] z-50'>
+                    <div className='relative bg-[#16171A] w-[450px] rounded-lg  p-6 flex flex-col gap-2 my-4 border border-[#2E2F31] transform transition-all duration-300 scale-95 animate-fadeIn'>
+
+                        <button
+                            onClick={closeModifyPopup}
+                            className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4 text-white">
+                                <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
+                            </svg>
+                        </button>
+
+                        <h2 className='text-lg font-bold mb-0 text-white'>Modify Appointment</h2>
+                        <p className='text-sm text-white-200'>
+                            Appointment with {info?.with} <br />
+                            Changes will be sent to the client for approval
+                        </p>
+
+                        <p className='text-white text-m mt-2'>Select Date</p>
+
+                        <DayPicker
+                            mode="single"
+                            selected={selectedDate}
+                            onSelect={setSelectedDate}
+                            defaultMonth={selectedDate}
+                            className="rounded-lg px-3 text-white-200 w-full border border-[#2E2F31] "
+                            styles={{
+                                caption: { color: 'white' },
+                                day: { color: 'white' },
+                                selected: { backgroundColor: '#5275e0', color: 'white', textAlign: 'center' },
+                                today: { color: '#5275e0' },
+                            }}
+                            modifiersClassNames={{
+                                selected: 'bg-blue-600 text-white rounded-full',
+                                today: 'text-blue-600',
+                            }}
+                        />
+
+                        <div className='grid grid-cols-2 gap-4 mt-1'>
+                            <div>
+                                <p className='text-white text-m pb-1'>Select Time</p>
+                                <input
+                                    type="time"
+                                    className='bg-[#1C1E22] text-white-200 rounded-lg px-4 py-2 w-full border border-[#2E2F31] '
+                                    defaultValue={info?.time}
+                                />
+                            </div>
+                            <div>
+                                <p className='text-white text-m pb-1'>Duration</p>
+                                <select className='bg-[#1C1E22] text-white-200 rounded-lg px-4 py-2 w-full border border-[#2E2F31] '>
+                                    <option value="15">15 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                    <option value="45">45 minutes</option>
+                                    <option value="60">60 minutes</option>
+                                    <option value="90">90 minutes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <p className='text-white text-m mt-2'>Note to Client (Optional)</p>
+                        <textarea
+                            className='bg-[#1C1E22] text-white-200 rounded-lg px-4 py-2 w-full h-24 border border-[#2E2F31] '
+                            placeholder='Explain why you need to modify this appointment...'
+
+                        >
+
+                        </textarea>
+
+                        <div className='grid grid-cols-2 gap-4 mt-1'>
+                            <button
+                                className='bg-transparent border border-[#2E2F31] text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-500 cursor-pointer'
+                                onClick={closeModifyPopup}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                Cancel
+                            </button>
+                            <button
+                                className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'
+                                onClick={closeModifyPopup}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check h-4 w-4"><path d="M20 6 9 17l-5-5"></path></svg>
+                                Submit Changes
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             )}
