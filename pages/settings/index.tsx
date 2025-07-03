@@ -1,7 +1,7 @@
 import { useAuth } from '../../src/hooks/useAuth';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
-import NavigateButton from './NavigateButton';
+import NavigateButton from '../../components/settings/NavigateButton';
 
 export default function Settings() {
   const { user } = useAuth();
@@ -43,7 +43,7 @@ export default function Settings() {
         <NavigateButton title='Dashboard' desc='Return to your dashboard' link={`/dashboard/${user?.role}`} icon='dashboard' />
         <span className='text-center my-2 ml-4 text-white-950'>Account Settings</span>
         <NavigateButton title='View Public Profile' desc='See how clients view your profile' link={`/dashboard/profile`} icon='eye' />
-        <NavigateButton title='Account Status' desc='Set your profile visibility' link={`#`} icon='globe' />
+        <NavigateButton title='Account Status' desc='Set your profile visibility' link={`settings/accountStatus`} icon='globe' />
         <NavigateButton title='Contact Information' desc='Update your email and phone number' link={`#`} icon='mail' />
         <NavigateButton title='Services Offered' desc='Select the services you provide' link={`#`} icon='services' />
         <NavigateButton title='Invoice Settings' desc='Configure tax rates and invoice defaults' link={`#`} icon='invoice' />
