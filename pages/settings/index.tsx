@@ -44,7 +44,7 @@ export default function Settings() {
         <span className='text-center my-2 ml-4 text-white-950'>Account Settings</span>
         <NavigateButton title='View Public Profile' desc='See how clients view your profile' link={`/dashboard/profile`} icon='eye' />
         <NavigateButton title='Account Status' desc='Set your profile visibility' link={`settings/accountStatus`} icon='globe' />
-        <NavigateButton title='Contact Information' desc='Update your email and phone number' link={`#`} icon='mail' />
+        <NavigateButton title='Contact Information' desc='Update your email and phone number' link={`settings/contact-infomation`} icon='mail' />
         <NavigateButton title='Services Offered' desc='Select the services you provide' link={`#`} icon='services' />
         <NavigateButton title='Invoice Settings' desc='Configure tax rates and invoice defaults' link={`#`} icon='invoice' />
         <NavigateButton title='History' desc='View past appointments and activities' link={`#`} icon='history' />
