@@ -72,9 +72,8 @@ export function useAuth() {
           'Content-type': 'application/json'
         }
       });
-      const { user: authUser, error, refreshToken, token, message } = await res.json();
+      const { error, refreshToken, token } = await res.json();
       if(!error){
-        setUser(authUser);
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('refreshToken', refreshToken);
         await getUser();
