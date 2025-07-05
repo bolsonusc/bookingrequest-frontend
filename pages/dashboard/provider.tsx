@@ -40,7 +40,7 @@ const Provider = () => {
   if (pageLoading || loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
-        <div className="text-xl">Loading...</div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
       </div>
     );
   }
@@ -69,12 +69,13 @@ const Provider = () => {
               info={{
                 title: 'Website Design Consultation1',
                 date: '2023-10-01',
-                time: '15:00 .45 min',
+                time: '15:00',
                 note: 'Want to discuss website redesign for my company',
-                paymentStatus: 'unpaid',
+                paymentStatus: 'paid',
                 status: 'approved',
                 with: 'Emma Wilson',
-                invoice: 'INV-007'
+                invoice: 'INV-007',
+                amount: '$150.00'
               }}
               user={user}
             />
@@ -91,7 +92,7 @@ const Provider = () => {
               info={{
                 title: 'Website Design Consultation2',
                 date: '2023-10-01',
-                time: '15:00 .45 min',
+                time: '15:00',
                 paymentStatus: 'paid',
                 status: 'pending',
                 with: 'Emma Wilson',
@@ -105,7 +106,7 @@ const Provider = () => {
               info={{
                 title: 'Website Design Consultation3',
                 date: '2023-10-01',
-                time: '15:00 .45 min',
+                time: '15:00',
                 paymentStatus: 'paid',
                 status: 'pending',
                 with: 'Emma Wilson',
@@ -130,7 +131,7 @@ const Provider = () => {
                 invoice: 'INV-007',
                 amount: '$150.00',
                 email: 'sdfokf@gmail.com',
-                time: '15:00 .45 min',
+                time: '15:00',
                 title: 'Website Design Consultation',
               }}
               user={user}
@@ -144,7 +145,7 @@ const Provider = () => {
                 invoice: 'INV-007',
                 amount: '$150.00',
                 email: 'sdfokf@gmail.com',
-                time: '15:00 .45 min',
+                time: '15:00',
                 title: 'Website Design Consultation',
               }}
               user={user}
