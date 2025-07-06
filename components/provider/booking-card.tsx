@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from 'react'
-import Image from 'next/image';
 import { DayPicker } from "react-day-picker";
 import 'react-day-picker/dist/style.css';
+import { Calendar, Check, Clock3, Copy, Download, FileText, Link, Pen, RefreshCcw, SquarePen, X } from 'lucide-react';
 
 export const BookingCard = ({ user, info }) => {
 
@@ -74,11 +74,11 @@ export const BookingCard = ({ user, info }) => {
                 </div>
                 <div className='flex flex-col '>
                     <p className='text-sm text-white-200 flex items-center gap-2 mb-3'>
-                        <Image src="/calendar.svg" alt="Calendar Icon" width={18} height={18} />
+                        <Calendar size={17} />
                         {info?.date}
                     </p>
                     <p className='text-sm text-white-200 flex items-center gap-2'>
-                        <Image src="/clock.svg" alt="Clock Icon" width={18} height={18} />
+                        <Clock3 size={17}/>
                         {info?.time}
                     </p>
                 </div>
@@ -101,9 +101,7 @@ export const BookingCard = ({ user, info }) => {
                             onClick={closePopup}
                             className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4 text-white">
-                                <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
-                            </svg>
+                            <X size={18} color='white'/>
                         </button>
 
 
@@ -113,11 +111,11 @@ export const BookingCard = ({ user, info }) => {
 
                         <div className='flex flex-col py-1.5'>
                             <p className='text-sm text-white-200 flex items-center gap-2 mb-2'>
-                                <Image src="/calendar.svg" alt="Calendar Icon" width={18} height={18} />
+                                <Calendar size={17}/>
                                 {info?.date}
                             </p>
                             <p className='text-sm text-white-200 flex items-center gap-2'>
-                                <Image src="/clock.svg" alt="Clock Icon" width={18} height={18} />
+                                <Clock3 size={17}/>
                                 {info?.time}
                             </p>
                         </div>
@@ -136,39 +134,29 @@ export const BookingCard = ({ user, info }) => {
                             {info?.status === 'approved' ? (
                                 <div>
                                     <button className='bg-yellow-500 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-yellow-600' onClick={invoiceClick}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-text h-4 w-4">
-                                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-                                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                                            <path d="M10 9H8" />
-                                            <path d="M16 13H8" />
-                                            <path d="M16 17H8" />
-                                        </svg>
+                                        <FileText size={17} />
                                         View Invoice ({info?.invoice})
                                     </button>
 
                                     <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-600 cursor-pointer' onClick={modifyAppointment}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen h-4 w-4">
-                                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                                        </svg>
+                                        <Pen size={16} />
                                         Modify Appointment
                                     </button>
                                 </div>
                             ) : info?.status === 'pending' ? (
                                 <div>
                                     <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check h-4 w-4"><path d="M20 6 9 17l-5-5"></path></svg>
+                                        <Check size={17} />
                                         Accept Appointment
                                     </button>
 
                                     <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-400 cursor-pointer' onClick={modifyAppointment}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pen h-4 w-4">
-                                            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                                        </svg>
+                                        <Pen size={16}/>
                                         Edit Appointment
                                     </button>
 
                                     <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                        <X size={17}/>
                                         Decline Appointment
                                     </button>
 
@@ -187,9 +175,7 @@ export const BookingCard = ({ user, info }) => {
                             onClick={closeInvoicePopup}
                             className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4 text-white">
-                                <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
-                            </svg>
+                            <X size={17} color='white'/>
                         </button>
                         <h3 className='text-white text-xl font-medium mt-4'>Invoice Details</h3>
 
@@ -228,12 +214,12 @@ export const BookingCard = ({ user, info }) => {
 
 
                             <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-link h-4 w-4"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                <Link size={16} />
                                 Share URL
                             </button>
 
                             <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-ccw h-4 w-4"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>
+                                <RefreshCcw size={16} />
                                 Refund Invoice
                             </button>
 
@@ -243,25 +229,25 @@ export const BookingCard = ({ user, info }) => {
                             <ul className='text-white-200 text-sm flex  gap-3'>
                                 <li className='w-full'>
                                     <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Image src="/download.svg" alt="Clock Icon" width={20} height={20} />
+                                        <Download size={20} />
                                         Download
                                     </a>
                                 </li>
                                 <li className='w-full'>
                                     <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Image src="/copy.svg" alt="Clock Icon" width={16} height={16} />
+                                        <Copy size={16} />
                                         Copy
                                     </a>
                                 </li>
                                 <li className='w-full'>
                                     <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Image src="/edit.svg" alt="Clock Icon" width={16} height={16} />
+                                        <SquarePen size={16} />
                                         Edit
                                     </a>
                                 </li>
                                 <li className='w-full'>
                                     <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center' onClick={closePopup}>
-                                        <Image src="/close.svg" alt="Clock Icon" width={20} height={20} />
+                                        <X size={20} />
                                         Close
                                     </a>
                                 </li>
@@ -280,9 +266,7 @@ export const BookingCard = ({ user, info }) => {
                             onClick={closeModifyPopup}
                             className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4 text-white">
-                                <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
-                            </svg>
+                            <X size={20} color='white'/>
                         </button>
 
                         <h2 className='text-lg font-bold mb-0 text-white'>Modify Appointment</h2>
@@ -346,14 +330,14 @@ export const BookingCard = ({ user, info }) => {
                                 className='bg-transparent border border-[#2E2F31] text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-500 cursor-pointer'
                                 onClick={closeModifyPopup}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x h-4 w-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                <X size={18} />
                                 Cancel
                             </button>
                             <button
                                 className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'
                                 onClick={closeModifyPopup}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check h-4 w-4"><path d="M20 6 9 17l-5-5"></path></svg>
+                                <Check size={18}/>
                                 Submit Changes
                             </button>
                         </div>

@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import CustomRadio from '../../components/utils/CustomRadioButton';
+import { ArrowLeft, CircleCheckBig, Clock, Globe, Info, Lock } from 'lucide-react';
 
 
 const AccountStatus = () => {
@@ -35,9 +35,7 @@ const AccountStatus = () => {
       {/* ===== HEADER BAR ===== */}
       <header className="h-[65px] w-screen sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
         <button className='basis-2/100 w-8 cursor-pointer' onClick={()=>router.back()}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m0 0l7-7m-7 7l7 7" />
-          </svg>
+          <ArrowLeft size={20} />
         </button>
         <p className='font-normal text-lg leading-7 text-white-950 basis-90/100'>Account Status</p>
       </header>
@@ -47,7 +45,7 @@ const AccountStatus = () => {
 
         <div className='border-2 rounded-xl border-[#F97316] p-4'>
           <div className='flex'>
-            <Image src={'../icons/info.svg'} width={16} height={16} alt='alert' className=''/>
+            <Info size={16} color='#7F1D1D' />
             <h5 className='text-[15px] text-[#F97316] justify-self-center ml-auto md:mr-[45%] mr-[40%] m-1'>Action Required</h5>
           </div>
           <p className='text-[13px] text-center mb-2'>You need an active subscription and a connected Stripe account to set your profile to public or private.</p>
@@ -56,7 +54,7 @@ const AccountStatus = () => {
         </div>
 
         <div className='bg-[#22252A4D] text-[13px] text-white-250 p-4 rounded-xl flex gap-2 items-center'>
-          <Image src={'../icons/info.svg'} alt='info' height={20} width={20}/>
+          <Info size={20} color='#1D4FD7'/>
           Control your profile visibility and availability to clients. This setting affects how others see your profile and ability to book your services.
         </div>
 
@@ -68,13 +66,15 @@ const AccountStatus = () => {
               <div className='flex gap-2 items-center my-4'>
                 <CustomRadio name={'status'} value={'public'} checked={status === 'public'} onChange={()=> setStatus("public")} id='public' />
                 <label htmlFor="public" className='flex gap-2 cursor-pointer'>
-                  <Image src={'../icons/globe.svg'} alt='public' width={20} height={20} className='text-green-250'/>
+                  <Globe size={20} color='#22C55E'/>
                   <span className='text-[15px] text-white-950'>Public</span>
                 </label>
               </div>
               <p className='text-center my-4 text-white-250 text-[13px]'>Your profile is visible to everyone. Clients can find and book your services.</p>
               <p className='text-green-250 my-4 text-[11px] ml-10 flex gap-1'>
-                <Image src={'../icons/tick.svg'} alt='public' width={14} height={14} className='text-green-250'/>Your profile is currently public</p>
+                <CircleCheckBig size={14} color='#22C55E' />
+                Your profile is currently public
+              </p>
             </div>
 
             {/* Private */}
@@ -82,7 +82,7 @@ const AccountStatus = () => {
               <div className='flex gap-2 items-center my-4'>
                 <CustomRadio name={'status'} value={'private'} checked={status === 'private'} onChange={()=> setStatus("private")} id='private'/>
                 <label htmlFor="private" className='flex gap-2 cursor-pointer'>
-                  <Image src={'../icons/lock.svg'} alt='private' width={20} height={20} className='text-green-250'/>
+                  <Lock size={20} color='#3B82F6' />
                   <span className='text-[15px] text-white-950'>Private</span>
                 </label>
               </div>
@@ -94,7 +94,7 @@ const AccountStatus = () => {
               <div className='flex gap-2 items-center my-3'>
                 <CustomRadio name={'status'} value={'paused'} checked={status === 'paused'} onChange={()=> setStatus("paused")} id='paused'/>
                 <label htmlFor="paused" className='flex gap-2 cursor-pointer'>
-                  <Image src={'../icons/clock.svg'} alt='paused' width={20} height={20} className='text-green-250'/>
+                  <Clock size={20} color='#F97316' />
                   <span className='text-[15px] text-white-950'>Paused</span>
                 </label>
               </div>

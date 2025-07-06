@@ -63,7 +63,8 @@ export default function Register() {
           display_name: name
         }),
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const { error: registrationError } = await res.json();

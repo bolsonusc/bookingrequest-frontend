@@ -8,6 +8,7 @@ import groupLogo from '../../public/images/johnGropLogo.png';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../src/hooks/useAuth';
+import { ArrowLeft, Calendar, Clock, MapPin } from 'lucide-react';
 
 const getNext7Days = () => {
   const days = [];
@@ -21,13 +22,8 @@ const getNext7Days = () => {
 
 const DayPart = ({ part }) => {
   return (
-    <button className='gap-2 align-items-center justify-center my-2 border-1  border-gray rounded bg-black-950 block p-2 px-6 text-sm'>
-      <div className="text-white-250 w-5 h-5">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 28 28" stroke="currentColor" strokeWidth="2" className="w-full h-full">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-      </div>
+    <button className='gap-2 align-items-center justify-center my-2 border-1  border-gray rounded bg-black-950 block p-2 px-6 text-sm flex gap-2'>
+      <Clock size={20}/>
       {part}
     </button>
   )
@@ -52,11 +48,11 @@ const Profile = () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/providers/${id}`, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const data = await res?.json();
-      console.log(data);
       if (data?.error) {
         throw data?.error;
       }
@@ -94,14 +90,15 @@ const Profile = () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/availability/search?provider_id=${providerId}&date=${formatedDate}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const data = await res.json();
       if (data?.error) {
         throw data?.error;
       }
-      data?.availabilities?.length && setAvalibility(data?.availabilities[0]);
+      data?.availabilities?.length ? setAvalibility(data?.availabilities[0]) : setAvalibility(null);
     } catch (error) {
       console.error(error);
       setError(error);
@@ -134,7 +131,7 @@ const Profile = () => {
 
 
   return (
-    <div className='bg-[#0B0C0E] text-white flex flex-col items-center '>
+    <div className='bg-[#0B0C0E] text-white flex flex-col items-center'>
       <Head>
         <title>Profile</title>
         <meta name="description" content="User Profile" />
@@ -155,28 +152,23 @@ const Profile = () => {
       </Head>
 
       {/* ===== HEADER BAR ===== */}
-      <header className="h-[65px]  sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center w-full">
+      <header className="h-[65px] text-center sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center w-full">
         <button className='basis-2/100 w-8 cursor-pointer' onClick={() => router.back()}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5m0 0l7-7m-7 7l7 7" />
-          </svg>
+          <ArrowLeft size={20} />
         </button>
         <p className='font-normal text-lg leading-7 text-white-950 basis-90/100'>Public Profile Preview</p>
       </header>
 
       {/* ===== MAIN CARD ===== */}
-      <div className='flex flex-col items-center justify-center w-full '>
-        <div className='max-w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6'>
+      <div className='flex flex-col items-center justify-center'>
+        <div className='w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6'>
           <div className='flex flex-row'>
             <Image className='profile-image' width={94} height={94} alt={userDetails?.user?.display_name || 'Profile Image'} src={userDetails?.user?.avatar || profileImage} />
             <div className=' flex flex-col gap-2 text-sm px-3'>
               <h2 className='pt-6 font-bold text-2xl text-center text-white-950'>{userDetails?.user?.display_name || `${userDetails?.user?.firstName || ''} ${userDetails?.user?.lastName || ''}`}</h2>
               <p className='text-white-250'>@{userDetails?.user?.username || 'NA'}</p>
               <p className='flex items-center gap-1 text-white-250'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4" >
-                  <circle cx="12" cy="10.5" r="3" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 5.25-7.5 10.5-7.5 10.5S4.5 15.75 4.5 10.5a7.5 7.5 0 1115 0z" />
-                </svg>
+                <MapPin size={15} />
                 <span>{userDetails?.user?.city}, {userDetails?.user?.state}, {userDetails?.user?.country}</span>
               </p>
               <p className='text-center text-white-950'>{userDetails?.description || 'NA'}</p>
@@ -214,41 +206,37 @@ const Profile = () => {
             </div>
             <label htmlFor="manualDate" className='text-xs text-white-250'>Or enter date manually (MM/DD/YYYY)</label>
             <input type='date' className='my-2 h-[40px] w-full border-1 border-gray rounded bg-black-950 block p-[13px] text-sm' placeholder='MM/DD/YYYY' onChange={(e) => selectDate(e.target.value)} />
-            {!availability && <p className='text-sm text-white-250 mt-5 mb-3'>Please select a date to see available time slots</p>}
+            {!selectedDate && <p className='text-sm text-white-250 mt-5 mb-3'>Please select a date to see available time slots</p>}
 
-            {availability &&
+            {availability ?
               <div>
                 <h4 className='my-2 text-sm mt-6'>Available Times</h4>
                 <div className='flex justify-center items-center gap-3 mb-3'>
                   {availability?.day_parts ? availability?.day_parts?.map((day: string) => {
-                    return <DayPart part={day}></DayPart>
+                    return <DayPart part={day} key={day} />
                   }) :
                     <>
-                      {(Number(availability?.start?.split(':')[0]) < 5 && Number(availability?.end?.split(':')[0]) >= 12) && <DayPart part='Morning'></DayPart>}
-                      {(Number(availability?.start?.split(':')[0]) < 12 && Number(availability?.end?.split(':')[0]) >= 17) && <DayPart part='Afternoon'></DayPart>}
-                      {(Number(availability?.start?.split(':')[0]) < 17 && Number(availability?.end?.split(':')[0]) >= 21) && <DayPart part='Evening'></DayPart>}
-                      {(Number(availability?.start?.split(':')[0]) < 21 && Number(availability?.end?.split(':')[0]) <= 5) && <DayPart part='Night'></DayPart>}
+                      {(Number(availability?.start?.split(':')[0]) < 5 && Number(availability?.end?.split(':')[0]) >= 12) && <DayPart part='Morning' key={1} />}
+                      {(Number(availability?.start?.split(':')[0]) < 12 && Number(availability?.end?.split(':')[0]) >= 17) && <DayPart part='Afternoon' key={2} />}
+                      {(Number(availability?.start?.split(':')[0]) < 17 && Number(availability?.end?.split(':')[0]) >= 21) && <DayPart part='Evening' key={3} />}
+                      {(Number(availability?.start?.split(':')[0]) < 21 && Number(availability?.end?.split(':')[0]) <= 5) && <DayPart part='Night' key={4} />}
                     </>
                   }
                 </div>
                 <p className='text-xs text-white-250 mb-6'>Morning: 5am-12pm • Afternoon: 12pm-5pm • Evening: 5pm-9pm • Night: 9pm-5am</p>
               </div>
+              : <p className='text-sm text-white-250 mb-6'>No timeslot available</p>
             }
 
             <label htmlFor="note" className='text-sm'>Add a note (optional)</label>
             <textarea rows={3} className='overflow-auto relative w-full border-1  border-gray rounded bg-black-950 block p-[13px] my-3 text-sm' placeholder='Add any specific requests or questions...' onChange={(e) => setNote(e.target.value)} />
-            <button className='btn-blue w-full my-4'>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-gray-300 mx-3" >
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
+            <button className='btn-blue w-full my-4 flex gap-2'>
+              <Calendar size={20}/>
               <span>Request Booking</span>
             </button>
           </div>
         </div>
-        <div className='max-w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6 px-6 py-4 text-center'>
+        <div className='w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6 px-6 py-4 text-center'>
           <p className="text-white-250 text-[13px]">This is a preview of how clients see your public profile. To edit this information, go to your profile settings.</p>
           <button className='w-full border-1 border-gray bg-black-950 mt-4 p-3 rounded-xl text-sm' onClick={() => { router.push('/settings') }}>Edit Profile</button>
         </div>

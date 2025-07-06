@@ -37,6 +37,7 @@ const Onboarding = () => {
         body: JSON.stringify({ username }),
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const { error: updateError } = await res.json();
