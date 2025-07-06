@@ -30,7 +30,8 @@ export default function Verify() {
           token: otp
         }),
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const {error : verificationError,  user, token, refreshToken} = await res.json();
