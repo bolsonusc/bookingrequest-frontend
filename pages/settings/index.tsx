@@ -30,7 +30,7 @@ export default function Settings() {
       </Head>
 
       {/* ===== HEADER BAR ===== */}
-      <header className="h-[65px] w-full sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
+      <header className="w-[90vw] pb-5 pt-10 mx-auto border-b-1 border-gray flex flex-row items-center justify-center text-center">
         <button className='basis-2/100 w-8 cursor-pointer' onClick={()=>router.back()}>
           <ArrowLeft size={20}/>
         </button>
