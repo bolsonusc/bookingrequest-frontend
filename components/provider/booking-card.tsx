@@ -8,8 +8,6 @@ export const BookingCard = ({ user, info }) => {
 
     const [selectedDate, setSelectedDate] = useState(new Date(2023, 9, 1)); // Oct 1, 2023
 
-    console.log(info?.time);
-
     let statusClass = 'gray-500'; // default
     let mainstatusClass = 'bg-gray-600'; // default
 
