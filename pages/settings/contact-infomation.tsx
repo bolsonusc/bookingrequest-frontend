@@ -43,7 +43,7 @@ const ContactInformation = () => {
             </Head>
             <div className="min-h-screen  bg-black ">
                 {/* ===== HEADER BAR ===== */}
-                <header className="h-[65px] w-screen sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
+                <header className="w-[90vw] pb-5 pt-10 mx-auto border-b-1 border-gray flex flex-row items-center justify-center text-center">
                     <button className='basis-2/100 w-8 cursor-pointer' onClick={() => router.back()}>
                         <ArrowLeft size={20} color='white'/>
                     </button>
@@ -51,7 +51,7 @@ const ContactInformation = () => {
                 </header>
 
                 {/* ===== MAIN PAGE ===== */}
-                <div className='bg-black-950 flex flex-col mx-auto justify-center w-[40vw] p-4 rounded-xl'>
+                <div className='bg-black-950 mt-10 flex flex-col mx-auto justify-center w-[40vw] p-4 rounded-xl'>
 
                     <div className=' text-[13px] text-white-250 p-4 rounded-xl mb-4 text-center'>
                         Update your private contact information. This information is not visible to

@@ -30,9 +30,9 @@ export default function Settings() {
       </Head>
 
       {/* ===== HEADER BAR ===== */}
-      <header className="h-[65px] w-full sticky top-0 backdrop-blur-xs bg-[#0B0C0ECC] border-b-1 border-gray flex flex-row items-center justify-center text-center">
-        <button className='basis-2/100 w-8 cursor-pointer' onClick={()=>router.back()}>
-          <ArrowLeft size={20}/>
+      <header className="w-[90vw] pb-5 pt-10 mx-auto border-b-1 border-gray flex flex-row items-center justify-center text-center">
+        <button className='basis-2/100 w-8 cursor-pointer' onClick={() => router.back()}>
+          <ArrowLeft size={20} />
         </button>
         <p className='font-normal text-lg leading-7 text-white-950 basis-90/100'>Settings</p>
       </header>
@@ -46,7 +46,7 @@ export default function Settings() {
         <NavigateButton title='Contact Information' desc='Update your email and phone number' link={`settings/contact-infomation`} icon={<Mail size={16} className='mx-4' />} />
         <NavigateButton title='Services Offered' desc='Select the services you provide' link={`settings/services`} icon={<Tags size={16} className='mx-4' />} />
         <NavigateButton title='Invoice Settings' desc='Configure tax rates and invoice defaults' link={`#`} icon={<Receipt size={16} className='mx-4' />} />
-        <NavigateButton title='History' desc='View past appointments and activities' link={`#`} icon={<History size={16} className='mx-4' />} />
+        <NavigateButton title='History' desc='View past appointments and activities' link={`settings/history`} icon={<History size={16} className='mx-4' />} />
         <NavigateButton title='Availability' desc='Set your working hours' link={`#`} icon={<Clock size={16} className='mx-4' />} />
         <NavigateButton title='Subscription' desc='Manage your subscription plan' link={`#`} icon={<Calendar size={16} className='mx-4' />} />
         <NavigateButton title='Password' desc='Update your password' link={`#`} icon={<KeyRound size={16} className='mx-4' />} />

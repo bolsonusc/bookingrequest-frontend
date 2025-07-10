@@ -30,8 +30,8 @@ const Security = () => {
     try {
       const token = sessionStorage.getItem('token');
       // Send OTP for 2FA
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-otp`, {
-        method: 'POST',
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user?.id}/email`, {
+        method: 'PATCH',
         body: JSON.stringify({
           email
         }),
@@ -43,7 +43,7 @@ const Security = () => {
       });
       const result = await res.json();
       if (res.ok) {
-        router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`)
+        router.push(`/dashboard/${user?.role}`);
       } else {
         setError(result.message);
       }
@@ -73,9 +73,11 @@ const Security = () => {
       <div className="min-h-screen flex flex-wrap items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
         <div>
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Security</h2>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+              Add your email 
+            </h2>
             <p className="mt-2 text-center text-white-200">
-              Keep your account safe by adding your email for extra protection.
+              Add your email to receive a notification and update about your account security.
             </p>
           </div>
 
@@ -112,16 +114,9 @@ const Security = () => {
                 disabled={isLoading}
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Sending code...
-                  </span>
-                ) : (
-                  'Send verification code'
+                Add Email
+                {isLoading && (
+                  <span className="ml-2 animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
                 )}
               </button>
             </div>
