@@ -19,7 +19,7 @@ export function useAuth() {
   }, []);
 
   const getUser = async()=>{
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/user-by-token`, {
         headers: {
@@ -38,7 +38,8 @@ export function useAuth() {
   }
 
   const validateToken = async()=>{
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    console.log(token);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/validate-token`, {
         method: 'POST',
@@ -61,7 +62,7 @@ export function useAuth() {
   }
 
   const refreshToken = async()=>{
-    const rToken = sessionStorage.getItem('refreshToken');
+    const rToken = localStorage.getItem('refreshToken');
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
         method: 'POST',
@@ -74,8 +75,8 @@ export function useAuth() {
       });
       const { error, refreshToken, token } = await res.json();
       if(!error){
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
         await getUser();
       } else {
         router.push('/auth/login');
@@ -87,8 +88,8 @@ export function useAuth() {
   }
 
   const logout = ()=>{
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('refreshToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setUser(null);
   }
 

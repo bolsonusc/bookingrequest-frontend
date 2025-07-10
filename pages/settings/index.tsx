@@ -44,7 +44,7 @@ export default function Settings() {
         <NavigateButton title='View Public Profile' desc='See how clients view your profile' link={`/dashboard/profile`} icon={<Eye size={16} className='mx-4' />} />
         <NavigateButton title='Account Status' desc='Set your profile visibility' link={`settings/account-status`} icon={<Globe size={16} className='mx-4' />} />
         <NavigateButton title='Contact Information' desc='Update your email and phone number' link={`settings/contact-infomation`} icon={<Mail size={16} className='mx-4' />} />
-        <NavigateButton title='Services Offered' desc='Select the services you provide' link={`#`} icon={<Tags size={16} className='mx-4' />} />
+        <NavigateButton title='Services Offered' desc='Select the services you provide' link={`settings/services`} icon={<Tags size={16} className='mx-4' />} />
         <NavigateButton title='Invoice Settings' desc='Configure tax rates and invoice defaults' link={`#`} icon={<Receipt size={16} className='mx-4' />} />
         <NavigateButton title='History' desc='View past appointments and activities' link={`settings/history`} icon={<History size={16} className='mx-4' />} />
         <NavigateButton title='Availability' desc='Set your working hours' link={`#`} icon={<Clock size={16} className='mx-4' />} />

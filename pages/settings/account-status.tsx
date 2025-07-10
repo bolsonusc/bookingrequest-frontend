@@ -8,7 +8,7 @@ import { ArrowLeft, CircleCheckBig, Clock, Globe, Info, Lock } from 'lucide-reac
 const AccountStatus = () => {
 
   const router  = useRouter();
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("public");
 
 
   return (
@@ -71,10 +71,10 @@ const AccountStatus = () => {
                 </label>
               </div>
               <p className='text-center my-4 text-white-250 text-[13px]'>Your profile is visible to everyone. Clients can find and book your services.</p>
-              <p className='text-green-250 my-4 text-[11px] ml-10 flex gap-1'>
+              { status==="public" && <p className='text-green-250 my-4 text-[11px] ml-10 flex gap-1'>
                 <CircleCheckBig size={14} color='#22C55E' />
                 Your profile is currently public
-              </p>
+              </p>}
             </div>
 
             {/* Private */}
@@ -87,6 +87,10 @@ const AccountStatus = () => {
                 </label>
               </div>
               <p className='text-center my-4 text-white-250 text-[13px]'>Your profile is only visible to approved contacts. You must manually approve booking requests.</p>
+              { status==="private" && <p className='text-[#3B82F6] my-4 text-[11px] ml-10 flex gap-1'>
+                <CircleCheckBig size={14} color='#3B82F6' />
+                Your profile is currently private
+              </p>}
             </div>
 
             {/* Paused */}
@@ -99,11 +103,15 @@ const AccountStatus = () => {
                 </label>
               </div>
               <p className='text-center my-3 text-white-250 text-[13px]'>Your profile is temporarily hidden. You won't receive any new booking requests until you unpause.</p>
+              { status==="paused" && <p className='text-[#F97316] my-4 text-[11px] ml-10 flex gap-1'>
+                <CircleCheckBig size={14} color='#F97316' />
+                Your profile is currently paused
+              </p>}
             </div>
           </div>
         </div>
 
-        <button className='text-[13px] rounded-xl bg-blue-250 p-2 cursor-pointer'>Save Changes</button>
+        <button className='text-[13px] rounded-xl bg-blue-750 p-2 cursor-pointer'>Save Changes</button>
       </div>
     </div>
   )
