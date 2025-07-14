@@ -47,7 +47,7 @@ export default function Settings() {
         <NavigateButton title='Services Offered' desc='Select the services you provide' link={`settings/services`} icon={<Tags size={16} className='mx-4' />} />
         <NavigateButton title='Invoice Settings' desc='Configure tax rates and invoice defaults' link={`#`} icon={<Receipt size={16} className='mx-4' />} />
         <NavigateButton title='History' desc='View past appointments and activities' link={`settings/history`} icon={<History size={16} className='mx-4' />} />
-        <NavigateButton title='Availability' desc='Set your working hours' link={`#`} icon={<Clock size={16} className='mx-4' />} />
+        <NavigateButton title='Availability' desc='Set your working hours' link={`settings/availability`} icon={<Clock size={16} className='mx-4' />} />
         <NavigateButton title='Subscription' desc='Manage your subscription plan' link={`#`} icon={<Calendar size={16} className='mx-4' />} />
         <NavigateButton title='Password' desc='Update your password' link={`#`} icon={<KeyRound size={16} className='mx-4' />} />
         <NavigateButton title='Payment Integration' desc='Connect your Stripe account' link={`#`} icon={<CreditCard size={16} className='mx-4' />} />

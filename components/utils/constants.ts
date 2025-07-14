@@ -10,3 +10,7 @@ export const SERVICE_LIST = [
     {title: 'Home Improvement & Construction', services:['Interior Design', 'Landscaping & Gardening', 'Roofing & Flooring', 'Smart Home Installation', 'Other Home Improvement & Construction Services'] },
     {title: 'Moving & Logistics', services:['Movers & Packers', 'Furniture Assembly', 'Courier & Delivery Services', 'Other Moving & Logistics Services'] },
 ];
+
+export const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+export const DAYPARTS = ['Morning', 'Afternoon', 'Evening', 'Night'];
