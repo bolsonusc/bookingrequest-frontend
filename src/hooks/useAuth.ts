@@ -79,7 +79,7 @@ export function useAuth() {
         await getUser();
       } else {
         router.push('/auth/login');
-        console.log(error);
+        console.error(error);
       }
     } catch (error) {
       console.error(error);
