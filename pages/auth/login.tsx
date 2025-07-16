@@ -59,7 +59,8 @@ export default function Login() {
           phone
         }),
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const { error: otpError } = await res.json();

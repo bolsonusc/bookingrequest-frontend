@@ -1,18 +1,9 @@
-
-import { createClient } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export function useAuth() {
   const [user, setUser] = useState(null);
   const [isValidToken, setIsValidToken] = useState(false);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     getUser();
@@ -20,10 +11,15 @@ export function useAuth() {
 
   const getUser = async()=>{
     const token = sessionStorage.getItem('token');
+    if(!token){
+      console.warn('Plese provide token by login or register!');
+      return;
+    }
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/user-by-token`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const { user: authUser, error } = await res.json();
@@ -39,6 +35,10 @@ export function useAuth() {
 
   const validateToken = async()=>{
     const token = sessionStorage.getItem('token');
+    if(!token){
+      console.warn('Token is not present to validate!');
+      return;
+    }
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/validate-token`, {
         method: 'POST',
@@ -46,7 +46,8 @@ export function useAuth() {
           token
         }),
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const { user_id, error } = await res.json();
@@ -62,6 +63,10 @@ export function useAuth() {
 
   const refreshToken = async()=>{
     const rToken = sessionStorage.getItem('refreshToken');
+    if(!rToken){
+      console.warn('Refresh token is not present to referesh the authentication!');
+      return;
+    }
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
         method: 'POST',
@@ -69,7 +74,8 @@ export function useAuth() {
           refresh_token: rToken
         }),
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
       const { error, refreshToken, token } = await res.json();
@@ -78,7 +84,6 @@ export function useAuth() {
         sessionStorage.setItem('refreshToken', refreshToken);
         await getUser();
       } else {
-        router.push('/auth/login');
         console.error(error);
       }
     } catch (error) {
