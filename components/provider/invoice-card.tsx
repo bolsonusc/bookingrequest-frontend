@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { Copy, Download, Eye, Link, RefreshCcw, Send, SquarePen, X } from 'lucide-react';
 
 export const InvoiceCard = ({ user, info }) => {
-    let statusClass = 'gray-500'; // default
+    let statusClass = 'text-gray-500'; // default
 
     if (info.status === 'paid') {
-        statusClass = 'green-400';
+        statusClass = 'text-green-400';
     } else if (info.status === 'unpaid') {
-        statusClass = 'amber-400';
+        statusClass = 'text-amber-400';
     } else if (info.status === 'cancelled') {
-        statusClass = 'red-500';
+        statusClass = 'text-red-500';
     }
 
 
@@ -32,7 +32,7 @@ export const InvoiceCard = ({ user, info }) => {
                         {info?.with}
                     </p>
                     <p className='text-white-200 text-sm mt-1'>
-                        <span className={`text-${statusClass} font-light`}>
+                        <span className={`${statusClass} font-light`}>
                             {info?.invoice}
                         </span> - {info?.date}
                     </p>
@@ -41,7 +41,7 @@ export const InvoiceCard = ({ user, info }) => {
                     <p className='text-white text-right'>
                         {info?.amount}
                         <br />
-                        <span className={`text-sm text-${statusClass} ml-2 uppercase`}>
+                        <span className={`text-sm ${statusClass} ml-2 uppercase`}>
                             {info?.status}
                         </span>
                     </p>
@@ -68,7 +68,7 @@ export const InvoiceCard = ({ user, info }) => {
 
                         <p className='text-white-200 text-sm mt-2 text-center my-5'>
                             <span>Invoice ID:</span><br />
-                            <span className={`text-base text-${statusClass} uppercase p-1.5 block`}>{info?.invoice}</span>
+                            <span className={`text-base ${statusClass} uppercase p-1.5 block`}>{info?.invoice}</span>
                             <span className='text-s mt-1'>{info?.date}</span>
                         </p>
 
@@ -91,7 +91,7 @@ export const InvoiceCard = ({ user, info }) => {
                             <p className='text-white text-lg font-medium text-right'>
                                 {info?.amount}
                                 <br />
-                                <span className={`text-sm text-${statusClass} ml-2 uppercase `}>
+                                <span className={`text-sm ${statusClass} ml-2 uppercase `}>
                                     {info?.status}
                                 </span>
                             </p>
