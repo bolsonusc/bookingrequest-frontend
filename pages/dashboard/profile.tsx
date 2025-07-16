@@ -42,7 +42,7 @@ const Profile = () => {
   const id = 23;
 
   const getDetails = async (id: Number | String) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       // Get provider details by id
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/providers/${id}`, {
@@ -64,7 +64,7 @@ const Profile = () => {
   }
 
   // const getId = async()=>{
-  //   const token = localStorage.getItem('token');
+  //   const token = sessionStorage.getItem('token');
   //   try {
   //     // Get user id
   //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${user?.role}s/me/id`, {
@@ -85,7 +85,7 @@ const Profile = () => {
   // }
 
   const getAvailabilityByDate = async (date: Date, providerId: Number) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const formatedDate = date?.toISOString().split('T')[0];
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/availability/search?provider_id=${providerId}&date=${formatedDate}`, {
