@@ -136,19 +136,6 @@ const Profile = () => {
         <title>Profile</title>
         <meta name="description" content="User Profile" />
         <link rel="icon" href="/favicon.ico" />
-        <style>
-          {`
-            .PhoneInputCountrySelect option  {
-              color: #1E1E1E;
-            }
-            .PhoneInputInput:focus {
-              outline: none;
-            }
-            .PhoneInputInput{
-              padding-left: 10px;
-            }
-          `}
-        </style>
       </Head>
 
       {/* ===== HEADER BAR ===== */}
