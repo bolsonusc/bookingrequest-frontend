@@ -21,7 +21,7 @@ export default function Login() {
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if(user){
+      if (user) {
         if (!user?.username) {
           router.push('/auth/onboarding');
         } else if (!user?.role) {
