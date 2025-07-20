@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowLeft, ChevronDown, ChevronUp, Clock, Info } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
@@ -21,7 +23,12 @@ const Availability = () => {
       breaks: BreakSlot[];
     }
     >>({});
-  const [activeDayparts, setActiveDayparts] = useState(DAYPARTS.slice(0,2));
+  const [activeDayparts, setActiveDayparts] = useState<Record<string, string[]>>(
+    WEEKDAYS.reduce((acc, day) => {
+      acc[day] = DAYPARTS.slice(0, 2); // ['Morning', 'Afternoon']
+      return acc;
+    }, {})
+  );
 
   const handleBreakChange = (day: string, index: number, key: 'from' | 'to', value: string) => {
     const updated = [...(schedule[day]?.breaks || [])];
@@ -65,10 +72,18 @@ const Availability = () => {
     !activeDays?.includes(val) ? setActiveDays((prev)=>[...prev, val]) : setActiveDays(prev=> prev?.filter(day => day != val));
   }
 
-  const toggleDayPart=(val:string)=>{
-    console.log(val);
-    !activeDayparts?.includes(val) ? setActiveDayparts((prev)=>[...prev, val]) : setActiveDayparts(prev=> prev?.filter(day => day != val));
-    console.log(activeDayparts);
+  const toggleDayPart=(e)=>{
+    const day = e.target.name;
+    const part = e.target.value;
+    !activeDayparts[day]?.includes(part) ?
+    setActiveDayparts((prev) => ({
+      ...prev,
+      [day]: [...prev[day], part]
+    })) 
+    : setActiveDayparts(prev=>({
+      ...prev,
+      [day]: prev[day]?.filter(p => p !== part)
+    }));
   }
 
   return (
@@ -216,11 +231,11 @@ const Availability = () => {
                       isActive && <div className='pb-4'>
                         <div className='grid grid-cols-2 md:grid-cols-4 gap-2 p-3 pt-1'>
                           {DAYPARTS?.map(part=>(
-                            <div className='bg-black-950 rounded-xl border-1 border-gray hover:bg-[#5275e0]' key={part}>
-                              <input type="checkbox" className='peer sr-only' name={day} value={part} checked={activeDayparts?.includes(part)} onChange={()=>toggleDayPart(part)}/>
-                               <div className='bg-black-950 p-2 rounded-xl hover:bg-[#5275e0] peer peer-checked:bg-blue-600'>{part}</div>
-                            </div>
-                          ))}
+                            <label className='bg-black-950 rounded-xl border-1 border-gray hover:bg-[#5275e0]' key={part}>
+                              <input type="checkbox" className='peer sr-only' name={day} value={part} checked={activeDayparts[day]?.includes(part)} onChange={toggleDayPart}/>
+                              <div className='bg-black-950 p-2 rounded-xl hover:bg-[#5275e0] peer peer-checked:bg-blue-600'>{part}</div>
+                            </label>)
+                          )}
                         </div>
                         <div className='text-white-250 text-xs flex flex-col'>
                           <span>Morning: 6:00 AM - 12:00 PM</span>
