@@ -4,9 +4,11 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
 import Head from 'next/head';
+import { ChevronRight, Calendar, Users, FilePlus, CalendarPlus2 } from 'lucide-react';
 import { UserInfo } from '../../components/provider/user-info';
 import { BookingCard } from '../../components/provider/booking-card';
 import { InvoiceCard } from '../../components/provider/invoice-card';
+import { QueckAction } from '../../components/settings/quick-action-card';
 
 const Provider = () => {
 
@@ -57,6 +59,31 @@ const Provider = () => {
         <div className='container mx-xl m-auto '>
 
           <UserInfo user={user} />
+          <div className="mt-8 mb-4">
+            <h3 className="text-xl font-normal text-white">Quick Actions</h3>
+            <div className='grid grid-cols-4 gap-4'>
+              <QueckAction
+                title="Availability"
+                link="/settings/availability"
+                icon={<Calendar size={25} color='#fff' className='m-auto' />}
+              />
+              <QueckAction
+                title="Booking"
+                link="/provider/bookings/create"
+                icon={<CalendarPlus2 size={25} color='#fff' className='m-auto' />}
+              />
+              <QueckAction
+                title="Contact"
+                link="/provider/bookings/create"
+                icon={<Users size={25} color='#fff' className='m-auto' />}
+              />
+              <QueckAction
+                title="Invoice"
+                link="/provider/bookings/create"
+                icon={<FilePlus size={25} color='#fff' className='m-auto' />}
+              />
+            </div>
+          </div>
           <div>
             <div className="mt-4 flex items-center justify-between">
               <h3 className="text-xl font-normal text-white">Upcoming Approved</h3>
