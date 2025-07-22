@@ -11,13 +11,13 @@ export const BookingCard = ({ user, info }) => {
     let statusClass = 'gray-500'; // default
     let mainstatusClass = 'bg-gray-600'; // default
 
-    if (info.paymentStatus === 'paid') {
+    if (info.status === 'approved') {
         statusClass = 'green-400';
         mainstatusClass = 'bg-green-500';
-    } else if (info.paymentStatus === 'unpaid') {
+    } else if (info.status === 'pending') {
         statusClass = 'amber-400';
         mainstatusClass = 'bg-amber-400';
-    } else if (info.paymentStatus === 'cancelled') {
+    } else if (info.status === 'cancelled') {
         statusClass = 'red-500';
         mainstatusClass = 'bg-red-500';
     }

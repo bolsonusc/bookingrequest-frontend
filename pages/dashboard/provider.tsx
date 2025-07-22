@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../src/hooks/useAuth';
 import Link from 'next/link';
 import Head from 'next/head';
+import { format } from 'date-fns';
 import { ChevronRight, Calendar, Users, FilePlus, CalendarPlus2 } from 'lucide-react';
 import { UserInfo } from '../../components/provider/user-info';
 import { BookingCard } from '../../components/provider/booking-card';
@@ -15,12 +16,82 @@ const Provider = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
+  const [activeBookings, setActiveBookings] = useState<BookingInfo[]>([]);
+  const [pendingBookings, setPendingBookings] = useState<BookingInfo[]>([]);
+
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/auth/login');
       return;
     }
+
+    const fetchBookings = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        // Handle case where token is missing even if user object exists (e.g., corrupted session)
+        router.push('/auth/login');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/status/active`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch active bookings: ${res.status}`);
+        } else {
+          setPageLoading(false);
+          const data = await res.json();
+
+          setActiveBookings(data || []);
+        }
+
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+        // Potentially redirect or show an error state
+      }
+
+
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/status/pending`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch active bookings: ${res.status}`);
+        } else {
+          setPageLoading(false);
+          const data = await res.json();
+
+          setPendingBookings(data || []);
+        }
+
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+        // Potentially redirect or show an error state
+      }
+
+
+
+    };
+
+    // Fetch active Pending
+
+    fetchBookings();
+
 
     if (!loading && user) {
       setPageLoading(false);
@@ -46,6 +117,7 @@ const Provider = () => {
       </div>
     );
   }
+
 
 
   return (
@@ -92,7 +164,32 @@ const Provider = () => {
               </Link>
             </div>
 
-            <BookingCard
+
+            {activeBookings.length > 0 ? (
+              activeBookings.map((booking, index) => (
+                console.log(booking),
+                <BookingCard
+                  key={index}
+                  info={{
+                    title: booking.title,
+                    date: format(new Date(booking.date), 'yyyy-MM-dd'),
+                    time: booking.start_time,
+                    note: booking.notes,
+                    paymentStatus: booking.paymentStatus,
+                    status: booking.status,
+                    with: booking.client.user.display_name,
+                    invoice: booking.invoice,
+                    amount: booking.amount
+                  }}
+                  user={user}
+                />
+              ))
+            ) : (
+              <div className="bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer text-center text-white">                No upcoming approved bookings.
+              </div>
+            )}
+
+            {/* <BookingCard
               info={{
                 title: 'Website Design Consultation1',
                 date: '2023-10-01',
@@ -105,7 +202,7 @@ const Provider = () => {
                 amount: '$150.00'
               }}
               user={user}
-            />
+            /> */}
           </div>
           <div>
             <div className="mt-15 flex items-center justify-between">
@@ -115,32 +212,29 @@ const Provider = () => {
               </Link>
             </div>
 
-            <BookingCard
-              info={{
-                title: 'Website Design Consultation2',
-                date: '2023-10-01',
-                time: '15:00',
-                paymentStatus: 'paid',
-                status: 'pending',
-                with: 'Emma Wilson',
-                invoice: 'INV-007',
-                note: ''
-              }}
-              user={user}
-            />
-
-            <BookingCard
-              info={{
-                title: 'Website Design Consultation3',
-                date: '2023-10-01',
-                time: '15:00',
-                paymentStatus: 'paid',
-                status: 'pending',
-                with: 'Emma Wilson',
-                invoice: 'INV-007'
-              }}
-              user={user}
-            />
+            {pendingBookings.length > 0 ? (
+              pendingBookings.map((booking, index) => (
+                <BookingCard
+                  key={index}
+                  info={{
+                    title: booking.title,
+                    date: format(new Date(booking.date), 'yyyy-MM-dd'),
+                    time: booking.start_time,
+                    note: booking.notes,
+                    paymentStatus: booking.paymentStatus,
+                    status: booking.status,
+                    with: booking.client.user.display_name,
+                    invoice: booking.invoice,
+                    amount: booking.amount
+                  }}
+                  user={user}
+                />
+              ))
+            ) : (
+              <div className="bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer text-center text-white">
+                No pending requests.
+              </div>
+            )}
           </div>
           <div>
             <div className="mt-15 flex items-center justify-between">
