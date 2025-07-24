@@ -21,6 +21,8 @@ const Provider = () => {
 
 
   useEffect(() => {
+    
+    
     if (!loading && !user) {
       router.push('/auth/login');
       return;
@@ -167,7 +169,7 @@ const Provider = () => {
 
             {activeBookings.length > 0 ? (
               activeBookings.map((booking, index) => (
-                console.log(booking),
+                
                 <BookingCard
                   key={index}
                   info={{
@@ -179,7 +181,8 @@ const Provider = () => {
                     status: booking.status,
                     with: booking.client.user.display_name,
                     invoice: booking.invoice,
-                    amount: booking.amount
+                    amount: booking.amount,
+                    id: booking.id
                   }}
                   user={user}
                 />
@@ -225,7 +228,8 @@ const Provider = () => {
                     status: booking.status,
                     with: booking.client.user.display_name,
                     invoice: booking.invoice,
-                    amount: booking.amount
+                    amount: booking.amount,
+                    id: booking.id
                   }}
                   user={user}
                 />
