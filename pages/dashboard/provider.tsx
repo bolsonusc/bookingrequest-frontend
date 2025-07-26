@@ -14,6 +14,10 @@ import { QueckAction } from '../../components/settings/quick-action-card';
 
 const Provider = () => {
 
+  type BookingInfo = Record<string, any>;
+  type InvoiceInfo = Record<string, any>;
+  type ServiceInfo = Record<string, any>;
+
   const router = useRouter();
   const { loading, user } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
@@ -88,7 +92,7 @@ const Provider = () => {
         });
         const servicesData = await services.json();
         setservices(servicesData || []);
-        
+
 
 
 
