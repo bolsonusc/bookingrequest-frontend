@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { format } from 'date-fns';
 import { ChevronRight, Calendar, Users, FilePlus, CalendarPlus2 } from 'lucide-react';
 import { UserInfo } from '../../components/provider/user-info';
+import { Skeleton } from '../../components/utils/Skeleton'
 import { BookingCard } from '../../components/provider/booking-card';
 import { InvoiceCard } from '../../components/provider/invoice-card';
 import { QueckAction } from '../../components/settings/quick-action-card';
@@ -16,94 +17,91 @@ const Provider = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const [pageLoading, setPageLoading] = useState(true);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [activeBookings, setActiveBookings] = useState<BookingInfo[]>([]);
   const [pendingBookings, setPendingBookings] = useState<BookingInfo[]>([]);
+  const [invoices, setInvoices] = useState<InvoiceInfo[]>([]);
+  const [services, setservices] = useState<ServiceInfo[]>([]);
 
+
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    
-    
-    if (!loading && !user) {
+    if (loading || hasFetched) return;
+
+    if (!user) {
       router.push('/auth/login');
+      return;
+    }
+    setPageLoading(false);
+    if (user?.role === 'client') {
+      router.push('/dashboard/client');
       return;
     }
 
     const fetchBookings = async () => {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        // Handle case where token is missing even if user object exists (e.g., corrupted session)
         router.push('/auth/login');
         return;
       }
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/status/approved`, {
-          method: 'GET',
+
+        const approvedRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/status/approved`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
             'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
           }
         });
+        const approvedData = await approvedRes.json();
+        setActiveBookings(approvedData || []);
 
-        if (!res.ok) {
-          throw new Error(`Failed to fetch active bookings: ${res.status}`);
-        } else {
-          setPageLoading(false);
-          const data = await res.json();
-
-          setActiveBookings(data || []);
-        }
-
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
-        // Potentially redirect or show an error state
-      }
-
-
-
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/status/pending`, {
-          method: 'GET',
+        const pendingRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/status/pending`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
             'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
           }
         });
+        const pendingData = await pendingRes.json();
+        setPendingBookings(pendingData || []);
 
-        if (!res.ok) {
-          throw new Error(`Failed to fetch active bookings: ${res.status}`);
-        } else {
-          setPageLoading(false);
-          const data = await res.json();
+        const invoiceRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invoices`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
+          }
+        });
+        const invoiceData = await invoiceRes.json();
+        setInvoices(invoiceData || []);
 
-          setPendingBookings(data || []);
-        }
+        // get all service 
+        const services = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/services`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
+          }
+        });
+        const servicesData = await services.json();
+        setservices(servicesData || []);
+        
 
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
-        // Potentially redirect or show an error state
+
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setShowSkeleton(false);
+        setHasFetched(true); // ✅ Mark as fetched
       }
-
-
-
     };
 
-    // Fetch active Pending
-
     fetchBookings();
-
-
-    if (!loading && user) {
-      setPageLoading(false);
-    }
-
-    if (user && user?.role === 'client') {
-      router.push('/dashboard/client');
-      return;
-    }
-  }, [user, loading, router]);
+  }, [loading, user, hasFetched]);
 
   const logout = async () => {
     // await supabase.auth.signOut();
@@ -167,45 +165,44 @@ const Provider = () => {
             </div>
 
 
-            {activeBookings.length > 0 ? (
-              activeBookings.map((booking, index) => (
-                
-                <BookingCard
-                  key={index}
-                  info={{
-                    title: booking.title,
-                    date: format(new Date(booking.date), 'yyyy-MM-dd'),
-                    time: booking.start_time,
-                    note: booking.notes,
-                    paymentStatus: booking.paymentStatus,
-                    status: booking.status,
-                    with: booking.client.user.display_name,
-                    invoice: booking.invoice,
-                    amount: booking.amount,
-                    id: booking.id
-                  }}
-                  user={user}
-                />
-              ))
-            ) : (
-              <div className="bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer text-center text-white">                No upcoming approved bookings.
-              </div>
-            )}
 
-            {/* <BookingCard
-              info={{
-                title: 'Website Design Consultation1',
-                date: '2023-10-01',
-                time: '15:00',
-                note: 'Want to discuss website redesign for my company',
-                paymentStatus: 'paid',
-                status: 'approved',
-                with: 'Emma Wilson',
-                invoice: 'INV-007',
-                amount: '$150.00'
-              }}
-              user={user}
-            /> */}
+            {showSkeleton && activeBookings.length == 0 ? (
+              <>
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <Skeleton key={`UpcomingApproved-${index}`} />
+                ))}
+              </>
+            ) :
+
+              activeBookings.length > 0 ? (
+                activeBookings.map((booking, index) => (
+
+                  <BookingCard
+                    key={index}
+                    info={{
+                      title: booking.title,
+                      date: format(new Date(booking.date), 'yyyy-MM-dd'),
+                      time: booking.start_time,
+                      note: booking.notes,
+                      paymentStatus: booking.paymentStatus,
+                      status: booking.status,
+                      with: booking.client.user.display_name,
+                      invoice: booking.invoice,
+                      amount: booking.amount,
+                      id: booking.id
+                    }}
+                    user={user}
+                  />
+                ))
+              ) : (
+                <div className="bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer text-center text-white">                No upcoming approved bookings.
+                </div>
+              )
+            }
+
+
+
+
           </div>
           <div>
             <div className="mt-15 flex items-center justify-between">
@@ -215,7 +212,14 @@ const Provider = () => {
               </Link>
             </div>
 
-            {pendingBookings.length > 0 ? (
+
+            {showSkeleton && pendingBookings.length == 0 ? (
+              <>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <Skeleton key={`PendingBooking-${index}`} />
+                ))}
+              </>
+            ) : pendingBookings.length > 0 ? (
               pendingBookings.map((booking, index) => (
                 <BookingCard
                   key={index}
@@ -239,6 +243,9 @@ const Provider = () => {
                 No pending requests.
               </div>
             )}
+
+
+
           </div>
           <div>
             <div className="mt-15 flex items-center justify-between">
@@ -248,33 +255,43 @@ const Provider = () => {
               </Link>
             </div>
 
-            <InvoiceCard
-              info={{
-                date: '2023-10-01',
-                status: 'unpaid',
-                with: 'Emma Wilson',
-                invoice: 'INV-007',
-                amount: '$150.00',
-                email: 'sdfokf@gmail.com',
-                time: '15:00',
-                title: 'Website Design Consultation',
-              }}
-              user={user}
-            />
 
-            <InvoiceCard
-              info={{
-                date: '2023-10-01',
-                status: 'paid',
-                with: 'Emma Wilson',
-                invoice: 'INV-007',
-                amount: '$150.00',
-                email: 'sdfokf@gmail.com',
-                time: '15:00',
-                title: 'Website Design Consultation',
-              }}
-              user={user}
-            />
+            {
+              showSkeleton && invoices.length == 0 ? (
+                <>
+                  {Array.from({ length: 2 }).map((_, index) => (
+                    <Skeleton key={`InvoiceCard-${index}`} />
+                  ))}
+                </>
+              ) :
+                invoices.length > 0 ? (
+                  invoices.map((invoice, index) => (
+                    <InvoiceCard
+                      key={index}
+                      info={{
+                        title: services.find(service => service.id === invoice.service_id)?.name || 'Service Title',
+                        date: invoice.date,
+                        status: invoice.status,
+                        with: invoice.client_name,
+                        invoice: invoice.invoice_number,
+                        amount: '$' + invoice.price,
+                        email: invoice.client_email,
+                        time: format(new Date(invoice.sent_date), 'HH:mm a'),
+                        id: invoice.id,
+                        notes: invoice.notes,
+                        download_url: invoice.download_url,
+                        share_url: invoice.share_url
+                      }}
+                      user={user}
+                    />
+                  ))
+                ) : (
+                  <div className="bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer text-center text-white">
+                    No recent invoices.
+                  </div>
+                )}
+
+
           </div>
 
         </div>

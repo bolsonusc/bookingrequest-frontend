@@ -23,7 +23,6 @@ export const InvoiceCard = ({ user, info }) => {
         // Handle close popup event
         setShowPopup(false);
     }
-
     return (
         <>
             <div className='border border-[#2E2F31] rounded-lg px-7 py-5 flex  gap-4 my-4 justify-between'>
@@ -62,7 +61,7 @@ export const InvoiceCard = ({ user, info }) => {
                             onClick={closePopup}
                             className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
                         >
-                            <X size={16} color='white'/>
+                            <X size={16} color='white' />
                         </button>
                         <h3 className='text-white text-xl font-medium mt-4'>Invoice Details</h3>
 
@@ -101,8 +100,14 @@ export const InvoiceCard = ({ user, info }) => {
                             {info?.status === 'paid' ? (
                                 <div>
 
-                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
-                                        <Link size={16}/>
+                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700 cursor-pointer'
+                                        onClick={() => {
+                                           // open new tab with share URL
+                                            navigator.clipboard.writeText(info?.share_url);
+                                            window.open(info?.share_url, '_blank');
+                                        }}
+                                    >
+                                        <Link size={16} />
                                         Share URL
                                     </button>
 
@@ -114,12 +119,18 @@ export const InvoiceCard = ({ user, info }) => {
                                 </div>
                             ) : info?.status === 'unpaid' ? (
                                 <div>
-                                    <button className='bg-indigo-500 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-indigo-600'>
+                                    <button className='bg-indigo-500 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-indigo-600 cursor-pointer'>
                                         <Send size={16} />
                                         Resend Invoice
                                     </button>
-                                    <button className='bg-blue-600 text-white mt-2  px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
-                                        <Link  size={16}/>
+                                    <button className='bg-blue-600 text-white mt-2  px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700 cursor-pointer'
+                                        onClick={() => {
+                                           // open share modal
+                                            navigator.clipboard.writeText(info?.share_url);
+                                            window.open(info?.share_url, '_blank');
+                                        }}
+                                    >
+                                        <Link size={16} />
                                         Share URL
                                     </button>
 
@@ -130,14 +141,21 @@ export const InvoiceCard = ({ user, info }) => {
                         <div className='mt-5'>
                             <ul className='text-white-200 text-sm flex  gap-3'>
                                 <li className='w-full'>
-                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Download size={18}/>
+                                    <a href={info?.download_url} target='_blank' className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
+                                        <Download size={18} />
                                         Download
                                     </a>
                                 </li>
                                 <li className='w-full'>
-                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Copy size={16}/>
+                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'
+                                        onClick={
+                                            () => {
+                                                navigator.clipboard.writeText(info?.download_url);
+                                                alert('Download URL copied to clipboard!');
+                                            }
+                                        }
+                                    >
+                                        <Copy size={16} />
                                         Copy
                                     </a>
                                 </li>
@@ -153,7 +171,7 @@ export const InvoiceCard = ({ user, info }) => {
                                         Close
                                     </a>
                                 </li>
-                                
+
                             </ul>
                         </div>
                     </div>
