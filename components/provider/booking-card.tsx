@@ -1,23 +1,25 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DayPicker } from "react-day-picker";
 import 'react-day-picker/dist/style.css';
-import { Calendar, Check, Clock3, Copy, Download, FileText, Link, Pen, RefreshCcw, SquarePen, X } from 'lucide-react';
+import { Calendar, Check, Clock3, FileText, Pen, X, Trash } from 'lucide-react';
 
 export const BookingCard = ({ user, info }) => {
 
     const [selectedDate, setSelectedDate] = useState(new Date(2023, 9, 1)); // Oct 1, 2023
+    const token = sessionStorage.getItem('token');
+
 
     let statusClass = 'gray-500'; // default
     let mainstatusClass = 'bg-gray-600'; // default
 
-    if (info.paymentStatus === 'paid') {
+    if (info.status === 'approved') {
         statusClass = 'green-400';
         mainstatusClass = 'bg-green-500';
-    } else if (info.paymentStatus === 'unpaid') {
+    } else if (info.status === 'pending') {
         statusClass = 'amber-400';
         mainstatusClass = 'bg-amber-400';
-    } else if (info.paymentStatus === 'cancelled') {
+    } else if (info.status === 'cancelled') {
         statusClass = 'red-500';
         mainstatusClass = 'bg-red-500';
     }
@@ -32,13 +34,30 @@ export const BookingCard = ({ user, info }) => {
         setShowPopup(false);
     }
 
-    const [showInvoicePopup, setShowInvoicePopup] = useState(false);
-    const invoiceClick = () => {
-        setShowInvoicePopup(true);
-    }
-    const closeInvoicePopup = () => {
-        // Handle close invoice popup event
-        setShowInvoicePopup(false);
+    const cancelAppointment = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${info.id}/provider-cancel`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
+            }
+        });
+        
+        const data = await res.json();
+        if (res.ok) {
+            // update popup content to reflect cancellation
+            setShowPopup(false);
+            alert('Appointment cancelled successfully');
+            // reload page or update state to reflect changes
+            window.location.reload();
+
+            
+        } else {
+            console.error('Error cancelling appointment:', data);
+            // Handle error, e.g., show an error message    
+        }
+
     }
 
 
@@ -76,7 +95,7 @@ export const BookingCard = ({ user, info }) => {
                         {info?.date}
                     </p>
                     <p className='text-sm text-white-200 flex items-center gap-2'>
-                        <Clock3 size={17}/>
+                        <Clock3 size={17} />
                         {info?.time}
                     </p>
                 </div>
@@ -99,7 +118,7 @@ export const BookingCard = ({ user, info }) => {
                             onClick={closePopup}
                             className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
                         >
-                            <X size={18} color='white'/>
+                            <X size={18} color='white' />
                         </button>
 
 
@@ -109,11 +128,11 @@ export const BookingCard = ({ user, info }) => {
 
                         <div className='flex flex-col py-1.5'>
                             <p className='text-sm text-white-200 flex items-center gap-2 mb-2'>
-                                <Calendar size={17}/>
+                                <Calendar size={17} />
                                 {info?.date}
                             </p>
                             <p className='text-sm text-white-200 flex items-center gap-2'>
-                                <Clock3 size={17}/>
+                                <Clock3 size={17} />
                                 {info?.time}
                             </p>
                         </div>
@@ -131,15 +150,16 @@ export const BookingCard = ({ user, info }) => {
                         <div className='mt-2'>
                             {info?.status === 'approved' ? (
                                 <div>
-                                    <button className='bg-yellow-500 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-yellow-600' onClick={invoiceClick}>
-                                        <FileText size={17} />
-                                        View Invoice ({info?.invoice})
-                                    </button>
 
-                                    <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-600 cursor-pointer' onClick={modifyAppointment}>
+                                    <button className='bg-transparent border border-[#2E2F31]  text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-600 cursor-pointer' onClick={modifyAppointment}>
                                         <Pen size={16} />
                                         Modify Appointment
                                     </button>
+                                    <button className='bg-red-500 text-white px-4 py-2 mt-3 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600 cursor-pointer' onClick={cancelAppointment}>
+                                        <Trash size={17} />
+                                        Cancel Appointment
+                                    </button>
+
                                 </div>
                             ) : info?.status === 'pending' ? (
                                 <div>
@@ -149,12 +169,12 @@ export const BookingCard = ({ user, info }) => {
                                     </button>
 
                                     <button className='bg-transparent border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-400 cursor-pointer' onClick={modifyAppointment}>
-                                        <Pen size={16}/>
+                                        <Pen size={16} />
                                         Edit Appointment
                                     </button>
 
                                     <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
-                                        <X size={17}/>
+                                        <X size={17} />
                                         Decline Appointment
                                     </button>
 
@@ -165,96 +185,6 @@ export const BookingCard = ({ user, info }) => {
                 </div>
             )}
 
-            {showInvoicePopup && (
-                <div className='fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.8)] z-50'>
-                    <div className='relative bg-[#16171A] w-[600px] rounded-lg  px-10 py-6 flex flex-col  my-4 border border-[#2E2F31] transform transition-all duration-300 scale-95 animate-fadeIn'>
-
-                        <button
-                            onClick={closeInvoicePopup}
-                            className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
-                        >
-                            <X size={17} color='white'/>
-                        </button>
-                        <h3 className='text-white text-xl font-medium mt-4'>Invoice Details</h3>
-
-                        <p className='text-white-200 text-sm mt-2 text-center my-5'>
-                            <span>Invoice ID:</span><br />
-                            <span className={`text-base text-${statusClass} uppercase p-1.5 block`}>{info?.invoice}</span>
-                            <span className='text-s mt-1'>{info?.date}</span>
-                        </p>
-
-                        <p className='text-white-200 text-sm mt-2'>Client</p>
-                        <p className='text-white text-lg font-medium '>
-                            {info?.with}
-                        </p>
-                        <p className='text-white-200 text-sm mt-1'>
-                            {info?.email}
-                        </p>
-
-                        <p className='text-white-200 text-sm mt-8'>Service</p>
-                        <p className='text-white text-base  '>
-                            {info?.title} ({info?.date} - {info?.time})
-                        </p>
-                        <hr className='my-4 border-gray-700' />
-
-                        <div className='flex justify-between'>
-                            <p className='text-white-200 text-base'>Total Amount</p>
-                            <p className='text-white text-lg font-medium text-right'>
-                                {info?.amount}
-                                <br />
-                                <span className={`text-sm text-${statusClass} ml-2 uppercase `}>
-                                    {info?.paymentStatus}
-                                </span>
-                            </p>
-                        </div>
-                        <hr className='my-4 border-gray-700' />
-                        <div className='mt-2'>
-
-
-                            <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
-                                <Link size={16} />
-                                Share URL
-                            </button>
-
-                            <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
-                                <RefreshCcw size={16} />
-                                Refund Invoice
-                            </button>
-
-                        </div>
-
-                        <div className='mt-5'>
-                            <ul className='text-white-200 text-sm flex  gap-3'>
-                                <li className='w-full'>
-                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Download size={20} />
-                                        Download
-                                    </a>
-                                </li>
-                                <li className='w-full'>
-                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <Copy size={16} />
-                                        Copy
-                                    </a>
-                                </li>
-                                <li className='w-full'>
-                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center'>
-                                        <SquarePen size={16} />
-                                        Edit
-                                    </a>
-                                </li>
-                                <li className='w-full'>
-                                    <a href="#" className='flex items-center gap-2 text-white border border-[#2E2F31] hover:bg-[#5275e0] px-4 py-2 rounded-lg  w-full justify-center' onClick={closePopup}>
-                                        <X size={20} />
-                                        Close
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {showModifyPopup && (
                 <div className='fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.8)] z-50'>
@@ -264,7 +194,7 @@ export const BookingCard = ({ user, info }) => {
                             onClick={closeModifyPopup}
                             className='absolute right-4 top-4 rounded-full  p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer'
                         >
-                            <X size={20} color='white'/>
+                            <X size={20} color='white' />
                         </button>
 
                         <h2 className='text-lg font-bold mb-0 text-white'>Modify Appointment</h2>
@@ -335,7 +265,7 @@ export const BookingCard = ({ user, info }) => {
                                 className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'
                                 onClick={closeModifyPopup}
                             >
-                                <Check size={18}/>
+                                <Check size={18} />
                                 Submit Changes
                             </button>
                         </div>
