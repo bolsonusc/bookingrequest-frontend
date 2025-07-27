@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import CustomRadio from '../../components/utils/CustomRadioButton';
 import CustomSwitchButton from '../../components/utils/CustomSwitchButton';
 import { DAYPARTS, WEEKDAYS } from '../../components/utils/constants';
+import { getId } from '../dashboard/profile';
 
 type BreakSlot = { break_start: string; break_end: string };
 
@@ -107,27 +108,6 @@ const Availability = () => {
       ...prev,
       [day]: prev[day]?.filter(p => p !== part)
     }));
-  }
-
-  const getId = async()=>{
-    const token = sessionStorage.getItem('token');
-    try {
-      // Get user id
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/providers/me/id`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${token}`
-        }
-      });
-      const data = await res.json();
-      if(data?.error){
-        throw data?.error;
-      }
-      return data[`provider_id`];
-    } catch (error) {
-      console.error(error);
-      // setError(error);
-    }
   }
 
   const getAvailability = async()=>{
@@ -513,7 +493,6 @@ const Availability = () => {
           </footer>
         </>
       }
-
 
     </div>
   )
