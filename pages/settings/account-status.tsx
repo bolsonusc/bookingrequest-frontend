@@ -29,9 +29,11 @@ const AccountStatus = () => {
         throw data?.error;
       }
       setStatus(data?.visibility);
-      setLoading(false);
     } catch (error) {
+      alert(error);
       console.error(error);
+    } finally{
+      setLoading(false);
     }
   }
 
