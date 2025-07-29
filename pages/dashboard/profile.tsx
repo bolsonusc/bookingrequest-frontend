@@ -52,7 +52,7 @@ export const getId = async()=>{
 const Profile = () => {
 
   let dates: Date[] = getNext7Days();
-  const [selectedDate, setSelectedDate] = useState(dates[0]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [note, setNote] = useState("");
   const [userDetails, setUserDetails] = useState(null);
   const [error, setError] = useState(null);
