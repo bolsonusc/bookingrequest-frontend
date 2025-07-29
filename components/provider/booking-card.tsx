@@ -40,24 +40,58 @@ export const BookingCard = ({ user, info }) => {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
-                'Access-Control-Allow-Origin': '*' // Often handled by CORS on the server
+                'Access-Control-Allow-Origin': '*'
             }
         });
-        
         const data = await res.json();
         if (res.ok) {
-            // update popup content to reflect cancellation
             setShowPopup(false);
             alert('Appointment cancelled successfully');
-            // reload page or update state to reflect changes
             window.location.reload();
-
-            
         } else {
             console.error('Error cancelling appointment:', data);
-            // Handle error, e.g., show an error message    
         }
+    }
 
+    // Accept appointment
+    const acceptAppointment = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${info.id}/approve`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setShowPopup(false);
+            alert('Appointment approved successfully');
+            window.location.reload();
+        } else {
+            console.error('Error approving appointment:', data);
+        }
+    }
+
+    // Decline appointment
+    const declineAppointment = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${info.id}/decline`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Access-Control-Allow-Origin': '*'
+            },
+           
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setShowPopup(false);
+            alert('Appointment declined successfully');
+            window.location.reload();
+        } else {
+            console.error('Error declining appointment:', data);
+        }
     }
 
 
@@ -163,7 +197,7 @@ export const BookingCard = ({ user, info }) => {
                                 </div>
                             ) : info?.status === 'pending' ? (
                                 <div>
-                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700'>
+                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700' onClick={acceptAppointment}>
                                         <Check size={17} />
                                         Accept Appointment
                                     </button>
@@ -173,7 +207,7 @@ export const BookingCard = ({ user, info }) => {
                                         Edit Appointment
                                     </button>
 
-                                    <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600'>
+                                    <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600' onClick={declineAppointment}>
                                         <X size={17} />
                                         Decline Appointment
                                     </button>

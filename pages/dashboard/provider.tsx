@@ -163,7 +163,7 @@ const Provider = () => {
           <div>
             <div className="mt-4 flex items-center justify-between">
               <h3 className="text-xl font-normal text-white">Upcoming Approved</h3>
-              <Link href="/provider/bookings" className="text-blue-500 hover:text-blue-700">
+              <Link href="/settings/history" className="text-blue-500 hover:text-blue-700">
                 View All
               </Link>
             </div>
@@ -211,7 +211,7 @@ const Provider = () => {
           <div>
             <div className="mt-15 flex items-center justify-between">
               <h3 className="text-xl font-normal text-white">Pending Requests</h3>
-              <Link href="/provider/bookings" className="text-blue-500 hover:text-blue-700">
+              <Link href="/settings/history" className="text-blue-500 hover:text-blue-700">
                 View All
               </Link>
             </div>
@@ -254,7 +254,7 @@ const Provider = () => {
           <div>
             <div className="mt-15 flex items-center justify-between">
               <h3 className="text-xl font-normal text-white">Recent Invoice</h3>
-              <Link href="/provider/bookings" className="text-blue-500 hover:text-blue-700">
+              <Link href="/settings/history" className="text-blue-500 hover:text-blue-700">
                 View All
               </Link>
             </div>
