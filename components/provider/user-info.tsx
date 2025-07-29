@@ -17,7 +17,7 @@ export const UserInfo = ({ user }) => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <a href="/provider/calendar">
+                    <a href="/calendar">
                         <span className="w-12 h-12 rounded-full flex items-center justify-center text-white text-m border border-[#ABB0BA80] hover:border-blue-600 hover:bg-blue-600 transition-all duration-200">
                             <Calendar size={20}/>
                         </span>
