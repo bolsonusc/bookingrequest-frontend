@@ -12,8 +12,13 @@ const CalendarPage = () => {
   const router = useRouter();
   const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
   
-  console.log("Calendar component rendered, events:", events);
-  console.log("Token:", token ? "Present" : "Missing");
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/auth/login');
+      return;
+    }
+  }, [token, router]);
 
   useEffect(() => {
     const fetchBookings = async () => {
