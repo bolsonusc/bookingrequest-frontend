@@ -5,22 +5,30 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
+import { useAuth } from "../../src/hooks/useAuth";
 
 
 const CalendarPage = () => {
   const [events, setEvents] = useState([]);
   const router = useRouter();
-  const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
-  
+  const { user, loading } = useAuth();
+  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
+    const token = sessionStorage.getItem('token');
+
+    
+
+    if (!loading && !user) {
       router.push('/auth/login');
       return;
     }
-  }, [token, router]);
 
-  useEffect(() => {
+    
+
+    if (!loading && user) {
+      setPageLoading(false);
+    }
     const fetchBookings = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings`, {
@@ -30,9 +38,7 @@ const CalendarPage = () => {
           },
         });
         const data = await res.json();
-        console.log("Bookings data:", data);
-        console.log("Response status:", res.status);
-        console.log("Response ok:", res.ok);
+
         if (res.ok) {
           // Map bookings to FullCalendar event objects
           const bookings = Array.isArray(data) ? data : (data.bookings || []);
@@ -48,14 +54,13 @@ const CalendarPage = () => {
               dateObj.setHours(hours, minutes, seconds);
               start = dateObj.toISOString(); // Convert back to ISO string for FullCalendar
             }
-            
+
             // Compose event title and description
             const serviceName = b.service?.name || '';
             const clientName = b.client?.user?.display_name || b.client?.user?.username || '';
             const providerName = b.provider?.user?.display_name || b.provider?.user?.username || '';
             const status = b.status ? b.status.charAt(0).toUpperCase() + b.status.slice(1) : '';
             const note = b.notes || b.note || '';
-            console.log(`Booking ${b.id}: status="${b.status}"`);
             return {
               title: b.title || serviceName || "Booking",
               start,
@@ -72,8 +77,7 @@ const CalendarPage = () => {
               textColor: "#fff"
             };
           });
-          console.log("Mapped events:", events);
-          console.log("Events count:", events.length);
+
           setEvents(events);
         } else {
           console.error("Failed to fetch bookings:", res.status, data);
@@ -82,24 +86,24 @@ const CalendarPage = () => {
         console.error("Error fetching bookings:", err);
       }
     };
-    if (token) fetchBookings();
-  }, [token]);
+    fetchBookings();
+  }, [user, loading, router]);
 
   // Custom event content for tooltip/info
-  function renderEventContent(eventInfo) {
+  const renderEventContent = (eventInfo) => {
     const b = eventInfo.event.extendedProps;
     const time = b.start_time || b.time || '';
     const status = b.status || '';
     const service = b.serviceName || '';
     const client = b.clientName || '';
     const provider = b.providerName || '';
-    
+
     // Format time display
     const formattedTime = time ? formatTime(time) : '';
-    
+
     // Get status badge styles
     const getStatusStyles = (status) => {
-      switch(status) {
+      switch (status) {
         case 'approved': return { bg: '#22c55e', text: '#fff' };
         case 'pending': return { bg: '#f59e42', text: '#fff' };
         case 'finished': return { bg: '#5275e0', text: '#fff' };
@@ -108,39 +112,41 @@ const CalendarPage = () => {
         default: return { bg: '#6b7280', text: '#fff' };
       }
     };
-    
+
     const statusStyles = getStatusStyles(status);
-    
+
     return (
       <div className="p-1" style={{ fontSize: '11px', lineHeight: 1.2 }}>
         <div className="font-semibold text-white mb-1 truncate" style={{ fontSize: '12px' }}>
           {eventInfo.event.title}
         </div>
-        
+
         {formattedTime && (
           <div className="text-gray-300 mb-1 flex items-center">
             <span className="text-xs">🕐</span>
             <span className="ml-1">{formattedTime}</span>
           </div>
         )}
-        
+
         {service && (
           <div className="text-blue-300 mb-1 truncate" style={{ fontSize: '10px' }}>
             {service}
           </div>
         )}
-        
+
         {(client || provider) && (
           <div className="text-gray-400 truncate" style={{ fontSize: '10px' }}>
-            {client ? `Client: ${client}` : `Provider: ${provider}`}
+            {user?.role === 'client' && provider ? `Provider: ${provider}` : 
+             user?.role === 'provider' && client ? `Client: ${client}` : 
+             client ? `Client: ${client}` : `Provider: ${provider}`}
           </div>
         )}
-        
+
         {status && (
-          <div 
+          <div
             className="inline-block px-1 py-0.5 rounded text-xs font-medium mt-1"
-            style={{ 
-              backgroundColor: statusStyles.bg, 
+            style={{
+              backgroundColor: statusStyles.bg,
               color: statusStyles.text,
               fontSize: '9px'
             }}
@@ -151,9 +157,9 @@ const CalendarPage = () => {
       </div>
     );
   }
-  
+
   // Helper function to format time
-  function formatTime(timeString) {
+  const formatTime = (timeString: string) => {
     if (!timeString) return '';
     try {
       const [hours, minutes] = timeString.split(':');
@@ -164,6 +170,14 @@ const CalendarPage = () => {
     } catch {
       return timeString;
     }
+  }
+
+  if (pageLoading || loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      </div>
+    );
   }
 
   return (
@@ -409,7 +423,7 @@ const CalendarPage = () => {
             }
           }
         `}</style>
-        
+
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
