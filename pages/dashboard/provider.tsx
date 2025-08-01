@@ -131,7 +131,7 @@ const Provider = () => {
         <meta name="description" content="Authentication system" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-black py-12 px-4 sm:px-6 lg:px-8">
         <div className='container mx-xl m-auto '>
 
           <UserInfo user={user} />

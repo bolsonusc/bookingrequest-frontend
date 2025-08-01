@@ -5,9 +5,14 @@ import NavigateButton from '../../components/settings/NavigateButton';
 import { ArrowLeft, Calendar, Clock, CreditCard, Download, Eye, Globe, History, KeyRound, LayoutDashboard, LogOut, Mail, Receipt, Tags } from 'lucide-react';
 
 export default function Settings() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
-
+  const logout = async () => {
+    // await supabase.auth.signOut();
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('refreshToken');
+    router.push('/auth/login');
+  }
   return (
     <div className='bg-[#0B0C0E] text-white flex flex-col items-center w-full '>
       <Head>
@@ -40,8 +45,8 @@ export default function Settings() {
         <NavigateButton title='Payment Integration' desc='Connect your Stripe account' link={`settings/payment`} icon={<CreditCard size={16} className='mx-4' />} />
         <NavigateButton title='Export Data' desc='Download or email your history' link={`#`} icon={<Download size={16} className='mx-4' />} />
         <div className='mt-3 border-t-1 border-gray'>
-          <button className='w-[90vw] mx-4 my-6 flex gap-2 items-center p-3 justify-center bg-red-900 rounded-xl text-sm hover:bg-red-800' onClick={logout}>
-            <LogOut size={16}/> Logout
+          <button className='w-[90vw] mx-4 my-6 flex gap-2 items-center p-3 justify-center bg-red-900 rounded-xl text-sm hover:bg-red-800 cursor-pointer' onClick={logout}>
+            <LogOut size={16} /> Logout
           </button>
         </div>
       </div>
