@@ -184,7 +184,7 @@ const Provider = () => {
                   <BookingCard
                     key={index}
                     info={{
-                      title: booking.title,
+                      title: booking.title + ' for ' + booking.service?.name,
                       date: format(new Date(booking.date), 'yyyy-MM-dd'),
                       time: booking.start_time,
                       note: booking.notes,
@@ -228,7 +228,7 @@ const Provider = () => {
                 <BookingCard
                   key={index}
                   info={{
-                    title: booking.title,
+                    title: booking.title + ' for ' + booking.service?.name,
                     date: format(new Date(booking.date), 'yyyy-MM-dd'),
                     time: booking.start_time,
                     note: booking.notes,

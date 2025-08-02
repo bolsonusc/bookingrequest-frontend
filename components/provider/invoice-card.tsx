@@ -10,6 +10,8 @@ export const InvoiceCard = ({ user, info }) => {
         statusClass = 'text-amber-400';
     } else if (info.status === 'cancelled') {
         statusClass = 'text-red-500';
+    } else if (info.status === 'overdue') {
+        statusClass = 'text-red-500';
     }
 
 

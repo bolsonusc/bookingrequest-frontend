@@ -22,6 +22,12 @@ export const BookingCard = ({ user, info }) => {
     } else if (info.status === 'cancelled') {
         statusClass = 'red-500';
         mainstatusClass = 'bg-red-500';
+    }else if (info.status === 'finished') {
+        statusClass = 'blue-500';
+        mainstatusClass = 'bg-blue-500';
+    } else if (info.status === 'declined') {
+        statusClass = 'red-500';
+        mainstatusClass = 'bg-red-500';
     }
 
     const [showPopup, setShowPopup] = useState(false);
@@ -157,7 +163,7 @@ export const BookingCard = ({ user, info }) => {
 
 
                         <h2 className='text-lg font-bold mb-0 text-white'>
-                            <div className={`w-[8px] h-[8px] rounded-full ${statusClass} inline-block`}></div>&nbsp;&nbsp;&nbsp; {info?.title} </h2>
+                            <div className={`w-[8px] h-[8px] rounded-full ${mainstatusClass} inline-block`}></div>&nbsp;&nbsp;&nbsp; {info?.title} </h2>
                         <p className='text-sm  block font-light pt-2 text-white-200'>with {info?.with}</p>
 
                         <div className='flex flex-col py-1.5'>
@@ -197,7 +203,7 @@ export const BookingCard = ({ user, info }) => {
                                 </div>
                             ) : info?.status === 'pending' ? (
                                 <div>
-                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700' onClick={acceptAppointment}>
+                                    <button className='bg-blue-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-blue-700 cursor-pointer' onClick={acceptAppointment}>
                                         <Check size={17} />
                                         Accept Appointment
                                     </button>
@@ -207,7 +213,7 @@ export const BookingCard = ({ user, info }) => {
                                         Edit Appointment
                                     </button>
 
-                                    <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600' onClick={declineAppointment}>
+                                    <button className='bg-red-500 border border-[#2E2F31] mt-2 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 font-normal text-sm hover:bg-red-600 cursor-pointer' onClick={declineAppointment}>
                                         <X size={17} />
                                         Decline Appointment
                                     </button>

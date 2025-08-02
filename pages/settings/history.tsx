@@ -4,7 +4,7 @@ import { useAuth } from '../../src/hooks/useAuth';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import NavigateButton from '../../components/settings/NavigateButton';
-import { ArrowLeft, Clock, Funnel } from 'lucide-react';
+import { ArrowLeft, Clock, Funnel, ChevronLeft, ChevronRight } from 'lucide-react';
 import { BookingCard } from '../../components/provider/booking-card';
 import { Skeleton } from '../../components/utils/Skeleton';
 import { format } from 'date-fns';
@@ -21,6 +21,9 @@ export default function History() {
     const [filteredBookings, setFilteredBookings] = useState<BookingInfo[]>([]);
     const [filterStatus, setFilterStatus] = useState('all');
     const [hasFetched, setHasFetched] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const ITEMS_PER_PAGE = 10;
 
     useEffect(() => {
         if (loading || hasFetched) return;
@@ -43,7 +46,6 @@ export default function History() {
             }
 
             try {
-                // Fetch all bookings using the main endpoint
                 const allBookingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings`, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -51,10 +53,9 @@ export default function History() {
                         'Access-Control-Allow-Origin': '*'
                     }
                 });
-                const allBookingsData = await allBookingsRes.json();
+                const response = await allBookingsRes.json();
                 
-                setAllBookings(allBookingsData || []);
-                setFilteredBookings(allBookingsData || []);
+                setAllBookings(response || []);
 
             } catch (err) {
                 console.error(err);
@@ -67,14 +68,36 @@ export default function History() {
         fetchBookings();
     }, [loading, user, hasFetched, router]);
 
-    // Filter bookings based on status
+    // Client-side filtering and pagination
     useEffect(() => {
-        if (filterStatus === 'all') {
-            setFilteredBookings(allBookings);
-        } else {
-            setFilteredBookings(allBookings.filter(booking => booking.status === filterStatus));
+        let filtered = allBookings;
+        
+        // Apply status filter
+        if (filterStatus !== 'all') {
+            filtered = allBookings.filter(booking => booking.status === filterStatus);
         }
-    }, [filterStatus, allBookings]);
+        
+        // Set total count for pagination
+        setTotalCount(filtered.length);
+        
+        // Apply pagination
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const paginatedBookings = filtered.slice(startIndex, endIndex);
+        
+        setFilteredBookings(paginatedBookings);
+    }, [allBookings, filterStatus, currentPage, ITEMS_PER_PAGE]);
+
+    // Handle filter change
+    const handleFilterChange = (newStatus: string) => {
+        setFilterStatus(newStatus);
+        setCurrentPage(1);
+    };
+
+    // Handle page change
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+    };
 
 
 
@@ -112,7 +135,7 @@ export default function History() {
                 <div className='flex items-center'>
                     <Clock size={20} className='text-white-200' />
                     <span className='text-white-200 text-[13px] ml-2'>
-                        {allBookings.length} Appointments
+                        {totalCount} Appointments
                     </span>
                 </div>
                 <div className='flex items-center'>
@@ -120,7 +143,7 @@ export default function History() {
                     <select 
                         className='ml-2 bg-transparent border border-[#22252A] text-white-950 rounded-md p-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-primary' 
                         value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
+                        onChange={(e) => handleFilterChange(e.target.value)}
                     >
                         <option value="all">All</option>
                         <option value="pending">Pending</option>
@@ -142,24 +165,76 @@ export default function History() {
                         ))}
                     </>
                 ) : filteredBookings.length > 0 ? (
-                    filteredBookings.map((booking, index) => (
-                        <BookingCard
-                            key={index}
-                            info={{
-                                title: booking.title,
-                                date: format(new Date(booking.date), 'yyyy-MM-dd'),
-                                time: booking.start_time,
-                                note: booking.notes,
-                                paymentStatus: booking.paymentStatus,
-                                status: booking.status,
-                                with: booking.client?.user?.display_name || 'N/A',
-                                invoice: booking.invoice,
-                                amount: booking.amount,
-                                id: booking.id
-                            }}
-                            user={user}
-                        />
-                    ))
+                    <>
+                        {filteredBookings.map((booking, index) => (
+                            <BookingCard
+                                key={index}
+                                info={{
+                                    title: booking.title,
+                                    date: format(new Date(booking.date), 'yyyy-MM-dd'),
+                                    time: booking.start_time,
+                                    note: booking.notes,
+                                    paymentStatus: booking.paymentStatus,
+                                    status: booking.status,
+                                    with: booking.client?.user?.display_name || 'N/A',
+                                    invoice: booking.invoice,
+                                    amount: booking.amount,
+                                    id: booking.id
+                                }}
+                                user={user}
+                            />
+                        ))}
+                        
+                        {/* Pagination Controls */}
+                        {totalCount > ITEMS_PER_PAGE && (
+                            <div className="flex justify-center items-center mt-8 mb-4 gap-4">
+                                <button
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className="flex items-center px-4 py-2 bg-[#16171A] border border-[#2E2F31] rounded-lg text-white-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#22252A] transition-colors"
+                                >
+                                    <ChevronLeft size={16} className="mr-1" />
+                                    Previous
+                                </button>
+                                
+                                <div className="flex items-center gap-2">
+                                    {Array.from({ length: Math.ceil(totalCount / ITEMS_PER_PAGE) }, (_, i) => i + 1)
+                                        .filter(page => 
+                                            page === 1 || 
+                                            page === Math.ceil(totalCount / ITEMS_PER_PAGE) || 
+                                            Math.abs(page - currentPage) <= 1
+                                        )
+                                        .map((page, index, arr) => (
+                                            <React.Fragment key={page}>
+                                                {index > 0 && arr[index - 1] !== page - 1 && (
+                                                    <span className="text-white-200 px-2">...</span>
+                                                )}
+                                                <button
+                                                    onClick={() => handlePageChange(page)}
+                                                    className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                                                        currentPage === page
+                                                            ? 'bg-primary text-white'
+                                                            : 'bg-[#16171A] border border-[#2E2F31] text-white-200 hover:bg-[#22252A]'
+                                                    }`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            </React.Fragment>
+                                        ))
+                                    }
+                                </div>
+                                
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === Math.ceil(totalCount / ITEMS_PER_PAGE)}
+                                    className="flex items-center px-4 py-2 bg-[#16171A] border border-[#2E2F31] rounded-lg text-white-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#22252A] transition-colors"
+                                >
+                                    Next
+                                    <ChevronRight size={16} className="ml-1" />
+                                </button>
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <div className="bg-[#16171A] rounded-lg px-12 py-5 flex flex-col gap-4 my-4 border border-[#2E2F31] relative cursor-pointer text-center text-white">
                         No booking history found.
