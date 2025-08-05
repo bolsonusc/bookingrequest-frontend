@@ -11,28 +11,29 @@ const EditProfile = () => {
   const {loading} = useAuth();
   const router = useRouter();
   const [userDetails, setUserDetails] = useState(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
   const imageRef = useRef<HTMLInputElement>(null);
-  const [logo, setLogo] = useState<string | null>(null);
+  const [logo, setLogo] = useState<File | null>(null);
+  const [previewLogo, setPreviewLogo] = useState<string | null>(null);
   const logoRef = useRef<HTMLInputElement>(null);
   const [details, setDetails] = useState<any>({});
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result as string);
-    };
-    reader.readAsDataURL(file); // Convert file to base64 URL
+    setImage(file);
+    setPreviewAvatar(URL.createObjectURL(file));
   };
 
-  const handleUploadClick = () => {
+  const handleUploadClick = (e) => {
+    e.preventDefault();
     imageRef.current?.click();
   };
 
   const handleRemoveImage = () => {
     setImage(null);
+    setPreviewAvatar(null);
     if (imageRef.current) {
       imageRef.current.value = '';
     }
@@ -41,19 +42,18 @@ const EditProfile = () => {
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setLogo(reader.result as string);
-    };
-    reader.readAsDataURL(file); // Convert file to base64 URL
+    setLogo(file);
+    setPreviewLogo(URL.createObjectURL(file));
   };
 
-  const handleUploadLogoClick = () => {
+  const handleUploadLogoClick = (e) => {
+    e.preventDefault();
     logoRef.current?.click();
   };
 
   const handleRemoveLogo = () => {
     setLogo(null);
+    setPreviewLogo(null);
     if (logoRef.current) {
       logoRef.current.value = '';
     }
@@ -73,7 +73,6 @@ const EditProfile = () => {
       // Get provider details by id
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/providers/${id}`, {
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
           'Access-Control-Allow-Origin': '*'
         }
@@ -82,8 +81,8 @@ const EditProfile = () => {
       if (data?.error) {
         throw data?.error;
       }
-      setImage(data?.user?.avatar);
-      setLogo(data?.business_logo);
+      data?.user?.avatar && setPreviewAvatar(data?.user?.avatar);
+      data?.business_logo && setPreviewLogo(data?.business_logo);
       setUserDetails(data);
     } catch (error) {
       console.error(error);
@@ -92,21 +91,31 @@ const EditProfile = () => {
 
   const saveProfile = async()=>{
     const token = sessionStorage.getItem('token');
+    const formData = new FormData();
     try {
       // Get provider details by id
+      Object.keys(details).forEach((key) => { 
+        formData.append(key, details[key]);
+      });
+      if(logo){
+        formData.append('business_logo', logo);
+      }
+      if(image){
+        formData.append('avatar', image);
+      }
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/providers/me/settings`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
           'Access-Control-Allow-Origin': '*'
         },
-        body: JSON.stringify(details)
+        body: formData
       });
       const data = await res?.json();
       if (data?.error) {
         throw data?.error;
       }
+      alert(data?.message || 'Profile updated successfully!');
     } catch (error) {
       console.error(error);
       alert(error);
@@ -145,10 +154,10 @@ const EditProfile = () => {
         </div> :
         <div className='my-8 w-full text-center'>
           <form className='mb-8 flex flex-col items-center' encType='multipart/form-data'>
-            {image ? (
+            {(previewAvatar) ? (
               <div className="relative">
-                <img src={image} alt="Uploaded Image" className="w-32 h-32 object-cover rounded-full" />
-                <button onClick={handleRemoveImage} className="absolute -top-3 -right-3 bg-black text-white rounded-full p-1 hover:bg-gray-700" >
+                <img src={previewAvatar} alt="Uploaded Image" className="w-32 h-32 object-cover rounded-full" />
+                <button type='button' onClick={handleRemoveImage} className="absolute -top-3 -right-3 bg-black text-white rounded-full p-1 hover:bg-gray-700" >
                   <X size={16} />
                 </button>
               </div>
@@ -169,10 +178,10 @@ const EditProfile = () => {
           </div>
 
           <form encType='multipart/form-data' className='mb-8 flex flex-col items-center'>
-            {logo ? (
+            {(previewLogo) ? (
               <div className="relative">
-                <img src={logo} alt="Uploaded Logo" className="w-32 h-32 object-cover rounded-xl" />
-                <button onClick={handleRemoveLogo} className="absolute -top-3 -right-3 bg-black text-white rounded-xl p-1 hover:bg-gray-700" >
+                <img src={previewLogo} alt="Uploaded Logo" className="w-32 h-32 object-cover rounded-xl" />
+                <button type='button' onClick={handleRemoveLogo} className="absolute -top-3 -right-3 bg-black text-white rounded-xl p-1 hover:bg-gray-700" >
                   <X size={16} />
                 </button>
               </div>
@@ -182,7 +191,7 @@ const EditProfile = () => {
               </div>
             )}
             <input ref={logoRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
-            <button className='p-2 px-4 mt-3 border-1 border-gray bg-[#0B0C0E] text-sm rounded-xl max-w-fit' onClick={handleUploadClick}>
+            <button className='p-2 px-4 mt-3 border-1 border-gray bg-[#0B0C0E] text-sm rounded-xl max-w-fit' onClick={handleUploadLogoClick}>
               {logo ? 'Change Logo' : 'Upload Logo'}
             </button>
           </form>
