@@ -150,7 +150,7 @@ const Provider = () => {
               />
               <QueckAction
                 title="Contact"
-                link="/provider/bookings/create"
+                link="/settings/contacts"
                 icon={<Users size={25} color='#fff' className='m-auto' />}
               />
               <QueckAction
