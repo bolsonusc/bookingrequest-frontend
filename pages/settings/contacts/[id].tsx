@@ -138,7 +138,7 @@ const ContactDetail = () => {
         </button>
       </header>
 
-      <div className="w-[90vw] mx-auto mt-8 max-w-4xl">
+      <div className="w-[90vw] mx-auto mt-8 max-w-4xl bg-[#18191d] p-6 rounded-lg">
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -157,97 +157,97 @@ const ContactDetail = () => {
         ) : contact ? (
           <div className="space-y-6">
             {/* Name Field */}
-            <div className="bg-gray-800/30 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="p-1 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <User size={20} className="text-gray-400" />
-                <h3 className="text-lg font-medium text-white">Name</h3>
+                <h3 className="text-sm text-white">Name</h3>
               </div>
               {isEditing ? (
                 <input
                   type="text"
                   value={editForm.name}
                   onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2  border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
                   placeholder="Enter name"
                 />
               ) : (
-                <p className="text-gray-200 text-lg">{contact.name || 'No name provided'}</p>
+                <p className="px-3 py-2 bg-[#22252a] rounded-md text-white text-sm">{contact.name || 'No name provided'}</p>
               )}
             </div>
 
             {/* Email Field */}
-            <div className="bg-gray-800/30 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="p-1 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <Mail size={20} className="text-gray-400" />
-                <h3 className="text-lg font-medium text-white">Email</h3>
+                <h3 className="text-sm text-white">Email</h3>
               </div>
               {isEditing ? (
                 <input
                   type="email"
                   value={editForm.email}
                   onChange={(e) => setEditForm({...editForm, email: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2  border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
                   placeholder="Enter email"
                 />
               ) : (
-                <p className="text-gray-200 text-lg">{contact.email || 'No email provided'}</p>
+                <p className="px-3 py-2 bg-[#22252a] rounded-md text-white text-sm">{contact.email || 'No email provided'}</p>
               )}
             </div>
 
             {/* Phone Field */}
-            <div className="bg-gray-800/30 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="p-1 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <Phone size={20} className="text-gray-400" />
-                <h3 className="text-lg font-medium text-white">Phone Number</h3>
+                <h3 className="text-sm text-white">Phone Number</h3>
               </div>
               {isEditing ? (
                 <input
                   type="tel"
                   value={editForm.phone}
                   onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2  border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
                   placeholder="Enter phone number"
                 />
               ) : (
-                <p className="text-gray-200 text-lg">{contact.phone || 'No phone provided'}</p>
+                <p className="px-3 py-2 bg-[#22252a] rounded-md text-white text-sm">{contact.phone || 'No phone provided'}</p>
               )}
             </div>
 
             {/* Address Field */}
-            <div className="bg-gray-800/30 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="p-1 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <MapPin size={20} className="text-gray-400" />
-                <h3 className="text-lg font-medium text-white">Address</h3>
+                <h3 className="text-sm text-white">Address</h3>
               </div>
               {isEditing ? (
                 <input
                   type="text"
                   value={editForm.address}
                   onChange={(e) => setEditForm({...editForm, address: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2  border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
                   placeholder="Enter address"
                 />
               ) : (
-                <p className="text-gray-200 text-lg">{contact.address || 'No address provided'}</p>
+                <p className="px-3 py-2 bg-[#22252a] rounded-md text-white text-sm">{contact.address || 'No address provided'}</p>
               )}
             </div>
 
             {/* Notes Field */}
-            <div className="bg-gray-800/30 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="p-1 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <FileText size={20} className="text-gray-400" />
-                <h3 className="text-lg font-medium text-white">Notes</h3>
+                <h3 className="text-sm text-white">Notes</h3>
               </div>
               {isEditing ? (
                 <textarea
                   value={editForm.notes}
                   onChange={(e) => setEditForm({...editForm, notes: e.target.value})}
                   rows={4}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none resize-none"
+                  className="w-full px-3 py-2  border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500 resize-none"
                   placeholder="Enter notes"
                 />
               ) : (
-                <p className="text-gray-200 text-lg whitespace-pre-wrap">
+                <p className="px-3 py-2 bg-[#22252a] rounded-md text-white text-sm">
                   {contact.notes || 'No notes provided'}
                 </p>
               )}

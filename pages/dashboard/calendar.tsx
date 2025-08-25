@@ -116,7 +116,7 @@ const CalendarPage = () => {
     const statusStyles = getStatusStyles(status);
 
     return (
-      <div className="p-1" style={{ fontSize: '11px', lineHeight: 1.2 }}>
+      <div className="p-1 mb-4" style={{ fontSize: '11px', lineHeight: 1.2 }}>
         <div className="font-semibold text-white mb-1 truncate" style={{ fontSize: '12px' }}>
           {eventInfo.event.title}
         </div>

@@ -89,7 +89,7 @@ const AddNewContact = () => {
         </div>
       </header>
 
-      <div className="w-[90vw] mx-auto mt-8 max-w-4xl">
+      <div className="w-[90vw] mx-auto mt-8 max-w-4xl bg-[#18191d] p-6 rounded-lg">
         {error && (
           <div className="bg-red-900/20 border border-red-700 rounded-lg p-4 mb-6">
             <p className="text-red-400 text-sm">{error}</p>
@@ -98,77 +98,77 @@ const AddNewContact = () => {
 
         <div className="space-y-6">
           {/* Name Field */}
-          <div className="bg-gray-800/30 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="p-1 mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <User size={20} className="text-gray-400" />
-              <h3 className="text-lg font-medium text-white">Name</h3>
+              <h3 className="text-sm text-white">Name</h3>
             </div>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+              className="w-full px-3 py-2 border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
               placeholder="Enter contact name"
               required
             />
           </div>
 
           {/* Email Field */}
-          <div className="bg-gray-800/30 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="p-1 mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <Mail size={20} className="text-gray-400" />
-              <h3 className="text-lg font-medium text-white">Email</h3>
+              <h3 className="text-sm text-white">Email</h3>
             </div>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
-              className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+              className="w-full px-3 py-2 border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
               placeholder="Enter email address"
             />
           </div>
 
           {/* Phone Field */}
-          <div className="bg-gray-800/30 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="p-1 mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <Phone size={20} className="text-gray-400" />
-              <h3 className="text-lg font-medium text-white">Phone Number</h3>
+              <h3 className="text-sm text-white">Phone Number</h3>
             </div>
             <input
               type="tel"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
-              className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+              className="w-full px-3 py-2 border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
               placeholder="Enter phone number"
             />
           </div>
 
           {/* Address Field */}
-          <div className="bg-gray-800/30 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="p-1 mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <MapPin size={20} className="text-gray-400" />
-              <h3 className="text-lg font-medium text-white">Address</h3>
+              <h3 className="text-sm text-white">Address</h3>
             </div>
             <input
               type="text"
               value={formData.address}
               onChange={(e) => handleInputChange('address', e.target.value)}
-              className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+              className="w-full px-3 py-2 border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
               placeholder="Enter address"
             />
           </div>
 
           {/* Notes Field */}
-          <div className="bg-gray-800/30 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="p-1 mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <FileText size={20} className="text-gray-400" />
-              <h3 className="text-lg font-medium text-white">Notes</h3>
+              <h3 className="text-sm text-white">Notes</h3>
             </div>
             <textarea
               value={formData.notes}
               onChange={(e) => handleInputChange('notes', e.target.value)}
               rows={4}
-              className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none resize-none"
+              className="w-full px-3 py-2 border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500 resize-none"
               placeholder="Add any additional information"
             />
           </div>

@@ -116,12 +116,12 @@ const Contacts = () => {
               placeholder="Search contacts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-800 text-white pl-10 pr-4 py-3 rounded-lg border border-gray-700 focus:border-blue-500 focus:outline-none"
+              className="w-full px-3 py-2 pl-10 border-1 border-solid border-[#444444] bg-[#1E1E1E] rounded-md text-white text-sm  focus:outline-none focus:ring-2  focus:ring-indigo-500"
             />
           </div>
           <button
             onClick={handleAddNew}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-medium transition-colors"
+            className=" flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus size={20} />
             Add New
@@ -164,27 +164,27 @@ const Contacts = () => {
               <div
                 key={contact.id}
                 onClick={() => router.push(`/settings/contacts/${contact.id}`)}
-                className="bg-gray-800/50 rounded-lg p-4 flex items-center gap-4 hover:bg-gray-800/70 transition-colors cursor-pointer"
+                className="bg-[#18191d] border-1 border-solid border-[#44444496] rounded-lg p-3 flex items-center gap-4 hover:bg-transparent transition-colors cursor-pointer"
               >
                 {/* Avatar with Initials */}
-                <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                <div className="w-12 h-12 bg-[#22252a] rounded-full flex items-center justify-center text-white  text-l">
                   {contact.initials}
                 </div>
 
                 {/* Contact Info */}
                 <div className="flex-1">
-                  <h3 className="text-white font-semibold text-lg mb-1">{contact.name}</h3>
+                  <h3 className="text-white  text-lg mb-1">{contact.name}</h3>
                   <div className="flex items-center gap-4 text-gray-400 text-sm">
                     {contact.email && (
                       <div className="flex items-center gap-2">
                         <Mail size={14} />
-                        <span>{contact.email}</span>
+                        <span className='text-white-200'>{contact.email}</span>
                       </div>
                     )}
                     {contact.phone && (
                       <div className="flex items-center gap-2">
                         <Phone size={14} />
-                        <span>{contact.phone}</span>
+                        <span className='text-white-200'>{contact.phone}</span>
                       </div>
                     )}
                   </div>
