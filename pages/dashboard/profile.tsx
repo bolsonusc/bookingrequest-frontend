@@ -142,10 +142,10 @@ const Profile = () => {
           <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
         </div> :
         <div className='flex flex-col items-center justify-center'>
-          <div className='w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6'>
-            <div className='flex flex-row'>
+          <div className='md:w-[720px] w-[90vw] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6'>
+            <div className='flex flex-wrap'>
               <Image className='profile-image' width={94} height={94} alt={userDetails?.user?.display_name || 'Profile Image'} src={userDetails?.user?.avatar || profileImage} />
-              <div className=' flex flex-col gap-2 text-sm px-3'>
+              <div className='flex flex-col gap-2 text-sm px-3'>
                 <h2 className='pt-6 font-bold text-2xl text-center text-white-950'>{userDetails?.user?.display_name || `${userDetails?.user?.firstName || ''} ${userDetails?.user?.lastName || ''}`}</h2>
                 <p className='text-white-250'>@{userDetails?.user?.username || 'NA'}</p>
                 <p className='flex items-center gap-1 text-white-250'>
@@ -155,7 +155,7 @@ const Profile = () => {
                 <p className='text-center text-white-950'>{userDetails?.description || 'NA'}</p>
               </div>
             </div>
-            <div className='border-t-1 border-gray flex py-5'>
+            <div className='border-t-1 border-gray flex flex-wrap py-5'>
               <Image className='w-12 h-12 ml-7 rounded-[10px]' alt='Group Logo' width={48} height={48} src={userDetails?.business_logo || groupLogo} />
               <div className='ml-4'>
                 <h2 className='font-bold text-xl text-white-950'>{userDetails?.business_name || 'NA'}</h2>
@@ -164,7 +164,7 @@ const Profile = () => {
             </div>
             <div className='border-t-1 border-gray py-4 text-white-950 text-center'>
               <h3 className='text-center'>Services Offered</h3>
-              <div className='flex gap-4 ml-6 mt-3'>
+              <div className='flex flex-wrap gap-4 ml-6 mt-3'>
                 {
                   userDetails?.services?.map(service => {
                     return <span className='bg-gray-950 text-[11px] rounded-full py-2 px-4' key={service.id}>{service?.name}</span>
@@ -175,7 +175,7 @@ const Profile = () => {
             <div className="border-t-1 border-gray text-center px-6 py-3">
               <h3 className='my-4'>Check Availability</h3>
               <h4 className='my-2 text-sm'>Select a Date</h4>
-              <div className='flex flex-row gap-3 sm:mx-6 mx-1 my-3'>
+              <div className='flex flex-wrap justify-center gap-3 sm:mx-6 mx-1 my-3'>
                 {dates.map((date) => {
                   return (
                     <button className={`w-14 h-14 border-1 rounded-xl border-gray ${isSameDate(date, selectedDate) && 'selected-date'}`} key={date.toISOString()} onClick={() => selectDate(date)}>
@@ -217,7 +217,7 @@ const Profile = () => {
               </button>
             </div>
           </div>
-          <div className='w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6 px-6 py-4 text-center'>
+          <div className='md:w-[720px] bg-[#17191C] border-1 border-gray rounded-xl my-8 mx-6 px-6 py-4 text-center'>
             <p className="text-white-250 text-[13px]">This is a preview of how clients see your public profile. To edit this information, go to your profile settings.</p>
             <button className='w-full border-1 border-gray bg-black-950 mt-4 p-3 rounded-xl text-sm cursor-pointer hover:bg-black active:bg-gray-900' onClick={() => { router.push('profile/edit') }}>Edit Profile</button>
           </div>
