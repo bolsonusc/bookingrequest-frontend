@@ -101,7 +101,7 @@ const PrivacyPolicy = () => {
                             notification). We encourage you to review the Privacy Policy whenever you access the App
                             to stay informed about our information practices and the choices available to you.</p>
                         <h3 className='text-[20px] text-white font-semibold mt-3'>Contact Us</h3>
-                        <p>If you have any questions about this Privacy Policy, please contact us at: <a href='mailto:support@example.com' className='text-blue-500'>support@example.com</a></p>
+                        <p>If you have any questions about this Privacy Policy, please contact us at: <a href='mailto:support@bookingrequest.com' className='text-blue-500'>support@bookingrequest.com</a></p>
                     </div>
                 </div>
             </div>
